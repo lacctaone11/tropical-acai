@@ -35,6 +35,16 @@ foreach ($cart as $cartItem) {
         <link rel="icon" href="public/images/favicon_acai.webp" sizes="192x192" />
         <link rel="apple-touch-icon" href="public/images/favicon_acai.webp" />
         <meta name="msapplication-TileImage" content="public/images/favicon_acai.webp" />
+
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17642163670"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-17642163670');
+        </script>
+
         <link rel="preload" href="public/css/bootstrap.min.css" as="style">
         <link rel="preload" href="public/css/global.css" as="style">
         <link href="public/css/bootstrap.min.css" rel="stylesheet" media="print" onload="this.media='all'">

@@ -23,6 +23,16 @@ $totalCarrinho = acai_cart_total($cart);
         <meta name="theme-color" content="#64268c">
         <meta name="apple-mobile-web-app-status-bar-style" content="#64268c">
         <meta name="msapplication-navbutton-color" content="#64268c">
+
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17642163670"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-17642163670');
+        </script>
+
         <!-- Font Awesome via CDN -->
         <link rel="stylesheet"
               href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"

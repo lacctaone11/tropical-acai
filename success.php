@@ -194,6 +194,15 @@ $totalCarrinho = acai_cart_total($cart);
           crossorigin="anonymous"
           referrerpolicy="no-referrer" />
     <link rel="shortcut icon" href="public/images/favicon_acai.webp" />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17642163670"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'AW-17642163670');
+    </script>
+
     <link rel="preload" href="public/css/bootstrap.min.css" as="style">
     <link rel="preload" href="public/css/global.css" as="style">
     <link href="public/css/bootstrap.min.css" rel="stylesheet" media="print" onload="this.media='all'">
@@ -202,6 +211,32 @@ $totalCarrinho = acai_cart_total($cart);
         <link href="public/css/bootstrap.min.css" rel="stylesheet">
         <link href="public/css/global.css" rel="stylesheet">
     </noscript>
+
+    <!-- Event snippet for Compra conversion page -->
+    <script>
+        // Pegar valor do pedido do localStorage
+        var orderValue = parseFloat(localStorage.getItem('totalCarrinho') || '0');
+        if (orderValue <= 0) {
+            // Fallback: tentar pegar do PHP
+            orderValue = <?php echo $totalCarrinho > 0 ? $totalCarrinho : '0'; ?>;
+        }
+
+        // Gerar ID único de transação
+        var transactionId = 'LB_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+        // Disparar evento de conversão apenas se houver valor
+        if (orderValue > 0) {
+            gtag('event', 'conversion', {
+                'send_to': 'AW-17642163670/mom2CMWQ7MYbENabuNxB',
+                'value': orderValue,
+                'currency': 'BRL',
+                'transaction_id': transactionId
+            });
+
+            // Limpar para evitar conversão duplicada
+            localStorage.removeItem('totalCarrinho');
+        }
+    </script>
 </head>
 <body class="delivery">
     <div class="loading__component">
