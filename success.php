@@ -195,12 +195,12 @@ $totalCarrinho = acai_cart_total($cart);
           referrerpolicy="no-referrer" />
     <link rel="shortcut icon" href="public/images/favicon_acai.webp" />
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17642163670"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17761107013"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'AW-17642163670');
+        gtag('config', 'AW-17761107013');
     </script>
 
     <link rel="preload" href="public/css/bootstrap.min.css" as="style">
@@ -227,7 +227,7 @@ $totalCarrinho = acai_cart_total($cart);
         // Disparar evento de conversão apenas se houver valor
         if (orderValue > 0) {
             gtag('event', 'conversion', {
-                'send_to': 'AW-17642163670/mom2CMWQ7MYbENabuNxB',
+                'send_to': 'AW-17761107013/DN4yCOTrpMobEMX4k5VC',
                 'value': orderValue,
                 'currency': 'BRL',
                 'transaction_id': transactionId

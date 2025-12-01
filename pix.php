@@ -35,12 +35,12 @@ $totalCarrinho = acai_cart_total($cart);
         <meta name="msapplication-TileImage" content="public/images/favicon_acai.webp" />
 
         <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17642163670"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17761107013"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'AW-17642163670');
+            gtag('config', 'AW-17761107013');
         </script>
 
         <link rel="preload" href="public/css/bootstrap.min.css" as="style">

@@ -14,12 +14,12 @@
         <meta name="msapplication-navbutton-color" content="#64268c">
 
         <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17642163670"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17761107013"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'AW-17642163670');
+            gtag('config', 'AW-17761107013');
         </script>
 
         <link rel="stylesheet"
