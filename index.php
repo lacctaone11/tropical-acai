@@ -242,7 +242,7 @@
 							</a>
 						</div>
                                             <div class="produto-view">
-							<a href="produtos/2-copos-de-acai-1l-zero">
+							<a href="produtos/2-copos-de-acai-1l-zero.php">
 								<div class="text">
 									<h2>2 Copos de Açaí 1l Zero</h2>
 									<p>9 Complementos Grátis<br>Açaí cremoso zero açucar com até 9 complementos à sua escolha, do jeitinho que você quiser! 🍓🍍🍇</p>
