@@ -619,18 +619,24 @@ $totalCarrinho = acai_cart_total($cart);
 
             .order-bump-items {
                 display: flex;
-                flex-direction: column;
-                gap: 12px;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 10px;
+                justify-content: space-between;
             }
 
             .order-bump-item {
                 display: flex;
+                flex-direction: column;
                 align-items: center;
                 background: #fff;
                 border-radius: 10px;
-                padding: 10px;
+                padding: 12px 10px;
                 box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-                gap: 10px;
+                gap: 8px;
+                width: calc(33.33% - 7px);
+                min-width: 100px;
+                text-align: center;
             }
 
             .order-bump-item.added {
@@ -639,9 +645,9 @@ $totalCarrinho = acai_cart_total($cart);
             }
 
             .ob-image {
-                width: 60px;
-                height: 60px;
-                min-width: 60px;
+                width: 55px;
+                height: 55px;
+                min-width: 55px;
                 border-radius: 8px;
                 overflow: hidden;
                 background: #f5f5f5;
@@ -656,37 +662,41 @@ $totalCarrinho = acai_cart_total($cart);
             .ob-info {
                 flex: 1;
                 min-width: 0;
+                width: 100%;
             }
 
             .ob-info h4 {
-                font-size: 13px;
+                font-size: 11px;
                 font-weight: 700;
                 color: #333;
-                margin: 0 0 3px 0;
+                margin: 0 0 2px 0;
                 text-transform: uppercase;
+                line-height: 1.2;
             }
 
             .ob-info p {
-                font-size: 11px;
+                font-size: 9px;
                 color: #777;
-                margin: 0 0 5px 0;
+                margin: 0 0 4px 0;
                 line-height: 1.2;
             }
 
             .ob-prices {
                 display: flex;
                 align-items: center;
-                gap: 8px;
+                justify-content: center;
+                gap: 6px;
+                flex-wrap: wrap;
             }
 
             .ob-old-price {
-                font-size: 12px;
+                font-size: 10px;
                 color: #e53935;
                 text-decoration: line-through;
             }
 
             .ob-new-price {
-                font-size: 15px;
+                font-size: 13px;
                 font-weight: 700;
                 color: #2e7d32;
             }
@@ -695,15 +705,15 @@ $totalCarrinho = acai_cart_total($cart);
                 background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
                 color: #fff;
                 border: none;
-                border-radius: 20px;
-                padding: 8px 14px;
-                font-size: 12px;
+                border-radius: 15px;
+                padding: 6px 10px;
+                font-size: 10px;
                 font-weight: 600;
                 cursor: pointer;
                 white-space: nowrap;
                 display: flex;
                 align-items: center;
-                gap: 5px;
+                gap: 4px;
                 transition: all 0.3s ease;
             }
 
@@ -719,6 +729,16 @@ $totalCarrinho = acai_cart_total($cart);
 
             .ob-add-btn.added i:before {
                 content: "\f00c";
+            }
+
+            /* Responsivo para telas muito pequenas */
+            @media (max-width: 400px) {
+                .order-bump-item {
+                    width: calc(50% - 5px);
+                }
+                .order-bump-item:nth-child(3) {
+                    width: 100%;
+                }
             }
 
             /* Esconder order bump original no mobile */
