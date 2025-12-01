@@ -270,14 +270,28 @@ html, body{background-color:var(--primaria) !important;}
         </noscript>
     </head>
     <body class="delivery">
-        <div class="loading__component">
-            <div class="loading__bar"></div> 
+        <!-- Loading overlay que cobre tudo até o PIX estar pronto -->
+        <div id="pix-loading-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primaria); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div class="logo" style="margin-bottom: 30px;">
+                <img src="public/images/logo_acai.webp" alt="Tropical Açaí" style="width: 120px; height: 120px; border-radius: 50%;">
+            </div>
+            <div style="text-align: center; color: #fff;">
+                <div style="margin-bottom: 20px;">
+                    <i class="fa-solid fa-spinner fa-spin" style="font-size: 40px;"></i>
+                </div>
+                <h3 style="font-size: 18px; margin-bottom: 10px;">Gerando seu PIX...</h3>
+                <p style="font-size: 14px; opacity: 0.8;">Aguarde enquanto preparamos seu pagamento</p>
+            </div>
+        </div>
+
+        <div class="loading__component" style="display: none;">
+            <div class="loading__bar"></div>
             <div class="loading__circle">
                 <div class="loading__circle-spinner"></div>
             </div>
         </div>
 	    <div>
-                <section id="pix">
+                <section id="pix" style="display: none;">
         <div class="container">
             <div class="dados-pix">
                 <div class="topo-pix">
@@ -520,30 +534,55 @@ $(document).ready(function() {
             if (data.success) {
 
                 const qrcodeUrl = `https://quickchart.io/qr?text=${encodeURIComponent(data.qrcode)}&ecLevel=Q&margin=0&size=300`;
-                $('#qrcode-image').attr('src', qrcodeUrl).show();
-                $('#qrcode-loading').hide();
-                $('#codePix').val(data.qrcode);
 
-                var valorFormatado = data.amount.toFixed(2).replace('.', ',');
-                $('.price-pix strong').text('R$ ' + valorFormatado);
-                $('#total-price').text('R$ ' + valorFormatado);
+                // Criar uma imagem para pré-carregar o QR code
+                const qrImage = new Image();
+                qrImage.onload = function() {
+                    // QR Code carregou, agora exibir tudo
+                    $('#qrcode-image').attr('src', qrcodeUrl).show();
+                    $('#qrcode-loading').hide();
+                    $('#codePix').val(data.qrcode);
 
-                $('#transaction-id').text('ID ' + data.transactionId);
+                    var valorFormatado = data.amount.toFixed(2).replace('.', ',');
+                    $('.price-pix strong').text('R$ ' + valorFormatado);
+                    $('#total-price').text('R$ ' + valorFormatado);
 
-                $('.time-pix').html('<i class="fa-regular fa-alarm-clock"></i><div class="minutos">00</div><span>:</span><div class="segundos">00</div>');
+                    $('#transaction-id').text('ID ' + data.transactionId);
 
-                const expirationDate = new Date();
-                expirationDate.setMinutes(expirationDate.getMinutes() + 20);
-                startCountdown(expirationDate);
+                    $('.time-pix').html('<i class="fa-regular fa-alarm-clock"></i><div class="minutos">00</div><span>:</span><div class="segundos">00</div>');
 
-                console.log('✅ PIX gerado com sucesso! Transaction ID:', data.transactionId);
-                console.log('🔄 Iniciando verificação automática de pagamento...');
-                startPaymentStatusCheck(data.transactionId);
+                    const expirationDate = new Date();
+                    expirationDate.setMinutes(expirationDate.getMinutes() + 20);
+                    startCountdown(expirationDate);
+
+                    // Esconder loading e mostrar conteúdo PIX
+                    $('#pix-loading-overlay').fadeOut(300, function() {
+                        $('section#pix').fadeIn(300);
+                    });
+
+                    console.log('✅ PIX gerado com sucesso! Transaction ID:', data.transactionId);
+                    console.log('🔄 Iniciando verificação automática de pagamento...');
+                    startPaymentStatusCheck(data.transactionId);
+                };
+
+                qrImage.onerror = function() {
+                    // Erro ao carregar QR code, mostrar mesmo assim
+                    $('#qrcode-loading').html('<p style="color: red;">Erro ao carregar QR Code. Use o código abaixo.</p>');
+                    $('#codePix').val(data.qrcode);
+
+                    $('#pix-loading-overlay').fadeOut(300, function() {
+                        $('section#pix').fadeIn(300);
+                    });
+                };
+
+                // Iniciar carregamento do QR code
+                qrImage.src = qrcodeUrl;
+
             } else {
 
-                $('#total-price').text('R$ 0,00');
-                $('.time-pix').html('<i class="fa-regular fa-alarm-clock"></i><div class="minutos">00</div><span>:</span><div class="segundos">00</div>');
-                
+                // Esconder loading
+                $('#pix-loading-overlay').hide();
+
                 var errorMsg = data.error || 'Erro desconhecido';
 
                 if (data.details) {
@@ -552,7 +591,7 @@ $(document).ready(function() {
                     if (data.details.validation_errors) {
                         var validationErrors = data.details.validation_errors;
                         for (var field in validationErrors) {
-                            if (field.toLowerCase().indexOf('phone') !== -1 || 
+                            if (field.toLowerCase().indexOf('phone') !== -1 ||
                                 field.toLowerCase().indexOf('telefone') !== -1 ||
                                 validationErrors[field].toLowerCase().indexOf('phone') !== -1 ||
                                 validationErrors[field].toLowerCase().indexOf('telefone') !== -1) {
@@ -566,26 +605,42 @@ $(document).ready(function() {
                         errorMsg += '\n\n' + data.details.description;
                     }
                 }
-                
+
                 if (typeof Swal !== 'undefined') {
                     Swal.fire({
                         icon: 'error',
                         title: 'Erro ao gerar PIX',
                         text: errorMsg,
-                        confirmButtonText: 'OK'
+                        confirmButtonText: 'Voltar ao Checkout'
+                    }).then(function() {
+                        window.location.href = 'checkout.php';
                     });
                 } else {
                     alert('Erro ao gerar PIX: ' + errorMsg);
+                    window.location.href = 'checkout.php';
                 }
                 console.error('Erro na API:', data);
             }
         } catch (error) {
 
-            $('#total-price').text('R$ 0,00');
-            $('.time-pix').html('<i class="fa-regular fa-alarm-clock"></i><div class="minutos">00</div><span>:</span><div class="segundos">00</div>');
-            
+            // Esconder loading
+            $('#pix-loading-overlay').hide();
+
             console.error('Erro:', error);
-            alert('Erro ao processar pagamento. Verifique o console para mais detalhes.');
+
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro ao processar',
+                    text: 'Erro ao processar pagamento. Tente novamente.',
+                    confirmButtonText: 'Voltar ao Checkout'
+                }).then(function() {
+                    window.location.href = 'checkout.php';
+                });
+            } else {
+                alert('Erro ao processar pagamento.');
+                window.location.href = 'checkout.php';
+            }
         }
     }
     
