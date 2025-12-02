@@ -213,6 +213,11 @@ $(document).ready(function() {
         }
     }
 
+    // Atualizar cidade nos reviews assim que a página carregar
+    document.addEventListener('DOMContentLoaded', function() {
+        atualizarLocalizacao();
+    });
+
     async function escolherLocalizacao() {
         await atualizarLocalizacao();
 
@@ -750,10 +755,27 @@ $(document).ready(function() {
             e.stopPropagation();
 
             let is_valid = true;
+            let nomeValido = validarNome($('#nome').val());
+            let telefoneValido = $('#telefone').val().length >= 15;
 
-            // Validação apenas de nome e telefone
-            if (!validarNome($('#nome').val()) || $('#telefone').val().length < 15) {
+            // Validação de nome
+            if (!nomeValido) {
                 is_valid = false;
+                $('#nome').addClass('error');
+                $('.label-error[name="first_name_label_error"]').text('Informe nome e sobrenome').css('display', 'block');
+            } else {
+                $('#nome').removeClass('error');
+                $('.label-error[name="first_name_label_error"]').css('display', 'none');
+            }
+
+            // Validação de telefone
+            if (!telefoneValido) {
+                is_valid = false;
+                $('#telefone').addClass('error');
+                $('.label-error[name="phone_label_error"]').text('Informe um telefone válido').css('display', 'block');
+            } else {
+                $('#telefone').removeClass('error');
+                $('.label-error[name="phone_label_error"]').css('display', 'none');
             }
 
             if (is_valid) {
@@ -778,8 +800,6 @@ $(document).ready(function() {
 
                 $('button#step2-checkout-finish').removeClass('d-none');
                 $('#cep-checkout').focus();
-            } else {
-                console.log('Campos inválidos');
             }
         });
 
