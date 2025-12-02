@@ -70,7 +70,6 @@
                 <div class="loading__circle-spinner"></div>
             </div>
         </div>
-	    <div>
         <!-- Header Checkout -->
         <header class="checkout-header static">
             <div class="container">
