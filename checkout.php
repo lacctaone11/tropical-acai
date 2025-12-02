@@ -1,5 +1,12 @@
 <?php
 require_once __DIR__ . '/item/cart_helpers.php';
+
+// Evitar cache do navegador
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
+
 $cart          = acai_get_cart();
 $totalCarrinho = acai_cart_total($cart);
 ?>
@@ -668,7 +675,7 @@ $totalCarrinho = acai_cart_total($cart);
             }
 
         </style>
-        <script defer type="text/javascript" src="public/js/functions.js"></script>
+        <script defer type="text/javascript" src="public/js/functions.js?v=<?php echo time(); ?>"></script>
         <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"5cb2a07379cd4eefbb95393e110dd461","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
         <script>
         // Função para alternar o carrinho (colapsável)

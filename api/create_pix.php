@@ -1,13 +1,35 @@
 <?php
 require_once __DIR__ . '/../item/cart_helpers.php';
 
-
 header('Content-Type: application/json');
 
 // Black Cat Pagamentos API
 define('BLACKCAT_API_URL', 'https://api.blackcatpagamentos.com/v1/transactions');
 define('BLACKCAT_PUBLIC_KEY', 'pk_jnbuj9JZy7pQJTdfahRmVpziMgQAIKNCMCDstmQ4pJthriVP');
 define('BLACKCAT_SECRET_KEY', 'sk_8vY_tuYwmV8q8hL37uafgrYL-Gyeef3WC5SLwhnp53dEko55');
+
+// Função para gerar CPF válido
+function gerarCpf() {
+    $cpf = '';
+    for ($i = 0; $i < 9; $i++) {
+        $cpf .= rand(0, 9);
+    }
+    $soma1 = 0;
+    for ($i = 0; $i < 9; $i++) {
+        $soma1 += $cpf[$i] * (10 - $i);
+    }
+    $resto1 = $soma1 % 11;
+    $digito1 = ($resto1 < 2) ? 0 : 11 - $resto1;
+    $soma2 = 0;
+    for ($i = 0; $i < 9; $i++) {
+        $soma2 += $cpf[$i] * (11 - $i);
+    }
+    $soma2 += $digito1 * 2;
+    $resto2 = $soma2 % 11;
+    $digito2 = ($resto2 < 2) ? 0 : 11 - $resto2;
+    $cpf .= $digito1 . $digito2;
+    return $cpf;
+}
 
 $input = file_get_contents('php://input');
 $dados = json_decode($input, true);
@@ -21,72 +43,26 @@ $dadosPessoais = $dados['dadosPessoais'] ?? $dados;
 $dadosFrete = $dados['dadosFrete'] ?? [];
 $amount = floatval($dados['amount'] ?? 0);
 
-// Validação apenas de nome (obrigatório)
-if (empty($dadosPessoais['nome'])) {
-    echo json_encode([
-        'success' => false,
-        'error' => 'Nome do cliente é obrigatório.'
-    ]);
-    exit;
+// Pegar nome ou usar padrão
+$nome = $dadosPessoais['nome'] ?? 'Cliente';
+if (empty(trim($nome))) {
+    $nome = 'Cliente';
 }
 
-// Função para gerar CPF válido aleatório
-function gerarCPFValido() {
-    $cpf = [];
-    for ($i = 0; $i < 9; $i++) {
-        $cpf[$i] = mt_rand(0, 9);
-    }
-
-    // Primeiro dígito verificador
-    $soma = 0;
-    for ($i = 0; $i < 9; $i++) {
-        $soma += $cpf[$i] * (10 - $i);
-    }
-    $resto = $soma % 11;
-    $cpf[9] = $resto < 2 ? 0 : 11 - $resto;
-
-    // Segundo dígito verificador
-    $soma = 0;
-    for ($i = 0; $i < 10; $i++) {
-        $soma += $cpf[$i] * (11 - $i);
-    }
-    $resto = $soma % 11;
-    $cpf[10] = $resto < 2 ? 0 : 11 - $resto;
-
-    return implode('', $cpf);
+// Pegar telefone ou usar padrão
+$telefone = $dadosPessoais['telefone'] ?? $dadosPessoais['celular'] ?? $dadosPessoais['phone'] ?? '';
+$telefoneLimpo = preg_replace('/\D/', '', $telefone);
+if (empty($telefoneLimpo) || strlen($telefoneLimpo) < 10) {
+    $telefoneLimpo = '11999999999'; // Telefone padrão
 }
 
-// Função para gerar email baseado no nome
-function gerarEmailDoNome($nome) {
-    $nomeNormalizado = strtolower(trim($nome));
-    $nomeNormalizado = preg_replace('/[^a-z0-9\s]/', '', iconv('UTF-8', 'ASCII//TRANSLIT', $nomeNormalizado));
-    $partes = explode(' ', $nomeNormalizado);
-    $partes = array_filter($partes);
+// Gerar CPF válido
+$cpf = gerarCpf();
 
-    if (count($partes) >= 2) {
-        $email = $partes[0] . '.' . end($partes);
-    } else {
-        $email = $partes[0] ?? 'cliente';
-    }
+// Gerar email baseado no CPF
+$email = $cpf . '@cliente.com';
 
-    $email .= mt_rand(10, 999) . '@gmail.com';
-    return $email;
-}
-
-// Gerar CPF e Email se não foram fornecidos
-$cpfFornecido = $dadosPessoais['cpf'] ?? '';
-$emailFornecido = $dadosPessoais['email'] ?? '';
-
-$cpfLimpo = preg_replace('/\D/', '', $cpfFornecido);
-if (empty($cpfLimpo) || strlen($cpfLimpo) !== 11) {
-    $cpfLimpo = gerarCPFValido();
-}
-
-$emailParaUsar = $emailFornecido;
-if (empty($emailParaUsar) || !filter_var($emailParaUsar, FILTER_VALIDATE_EMAIL)) {
-    $emailParaUsar = gerarEmailDoNome($dadosPessoais['nome']);
-}
-
+// Calcular valor
 $cart = acai_get_cart();
 $totalCarrinho = acai_cart_total($cart);
 
@@ -101,18 +77,18 @@ if ($amountInCents <= 0) {
     exit;
 }
 
-
+// Montar items
 $items = [];
 foreach ($cart as $item) {
     $preco = floatval($item['preco_promocional'] ?? $item['preco'] ?? 0);
     $quantidade = intval($item['qtd'] ?? 1);
-    
+
     if ($preco > 0 && $quantidade > 0) {
         $items[] = [
             'title' => $item['title'] ?? 'Produto',
             'quantity' => $quantidade,
             'unitPrice' => intval($preco * 100),
-            'tangible' => true,
+            'tangible' => false,
             'externalRef' => 'item-' . ($item['id'] ?? uniqid())
         ];
     }
@@ -123,182 +99,59 @@ if (empty($items)) {
         'title' => 'Pedido Tropical Açaí',
         'quantity' => 1,
         'unitPrice' => $amountInCents,
-        'tangible' => true,
+        'tangible' => false,
         'externalRef' => 'pedido-' . time()
     ];
 }
 
-// CPF já foi validado/gerado acima
-
-$telefoneOriginal = $dadosPessoais['telefone'] ?? $dadosPessoais['celular'] ?? $dadosPessoais['phone'] ?? '';
-$telefoneLimpo = preg_replace('/\D/', '', $telefoneOriginal);
-
-if (empty($telefoneLimpo) || strlen($telefoneLimpo) < 10) {
-    echo json_encode([
-        'success' => false,
-        'error' => 'Telefone do cliente é obrigatório. Por favor, preencha o telefone no checkout.'
-    ]);
-    exit;
-}
-
-if (strlen($telefoneLimpo) === 10) {
-
-    $telefoneLimpo = substr($telefoneLimpo, 0, 2) . '9' . substr($telefoneLimpo, 2);
-}
-
-if (strlen($telefoneLimpo) > 11) {
-    $telefoneLimpo = substr($telefoneLimpo, -11);
-}
-
-
-
-
-
-
-
-
-
-
-$customerAddress = [
-    'street' => $dadosFrete['endereco'] ?? '',
-    'streetNumber' => $dadosFrete['numero'] ?? 'S/N',
-    'neighborhood' => $dadosFrete['bairro'] ?? '',
-    'city' => $dadosFrete['cidade'] ?? '',
-    'state' => strtoupper($dadosFrete['estado'] ?? ''),
-    'zipCode' => preg_replace('/\D/', '', $dadosFrete['cep'] ?? ''),
-    'country' => 'BR',
-    'complement' => $dadosFrete['complemento'] ?? ''
-];
-
-$enderecoValido = !empty($customerAddress['street']) && 
-                  !empty($customerAddress['city']) && 
-                  !empty($customerAddress['state']) && 
-                  !empty($customerAddress['zipCode']);
-
-$protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
-$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-$baseUrl = $protocol . '://' . $host;
-
-$ip = $_SERVER['REMOTE_ADDR'] ?? null;
-if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-    $ip = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0];
-}
-
-
+// Preparar payload simplificado (similar ao modelo Titans)
 $payload = [
-
-    'amount' => $amountInCents,
-
     'paymentMethod' => 'pix',
-
-    'pix' => [
-
-        'expiresInDays' => 1
-    ],
-
     'items' => $items,
-
+    'amount' => $amountInCents,
+    'installments' => '1',
     'customer' => [
-
-        'name' => $dadosPessoais['nome'],
-
-        'email' => $dadosPessoais['email'],
-
-        'phone' => $telefoneLimpo,
-
         'document' => [
-
-            'number' => $cpfLimpo,
-
-            'type' => 'cpf'
-        ]
-    ],
-
-    'postbackUrl' => $baseUrl . '/api/pix_webhook.php',
-
-    'returnUrl' => $baseUrl . '/pix.php',
-
-    'metadata' => json_encode(['source' => 'acai_mania']),
-
-    'externalRef' => 'pedido-' . time() . '-' . uniqid()
+            'type' => 'cpf',
+            'number' => $cpf
+        ],
+        'name' => $nome,
+        'email' => $email,
+        'phone' => $telefoneLimpo
+    ]
 ];
 
-if ($enderecoValido) {
-    $payload['customer']['address'] = $customerAddress;
-}
+// Autenticação BlackCat (public_key:secret_key)
+$auth_value = base64_encode(BLACKCAT_PUBLIC_KEY . ':' . BLACKCAT_SECRET_KEY);
 
-
-
-if ($enderecoValido) {
-
-
-    $freteValor = 0;
-    if (isset($dadosFrete['valor'])) {
-        $freteValor = floatval($dadosFrete['valor']);
-    } elseif (isset($dadosFrete['frete'])) {
-        $freteValor = floatval($dadosFrete['frete']);
-    } elseif (isset($dadosFrete['shipping_fee'])) {
-        $freteValor = floatval($dadosFrete['shipping_fee']);
-    } elseif (isset($dados['freteValor'])) {
-        $freteValor = floatval($dados['freteValor']);
-    }
-    
-    $freteValorCents = intval($freteValor * 100);
-
-    $payload['shipping'] = array_merge($customerAddress, [
-        'fee' => $freteValorCents
-    ]);
-    
-    error_log('Shipping fee: ' . $freteValorCents . ' centavos (R$ ' . $freteValor . ')');
-}
-
-if ($ip) {
-    $payload['ip'] = $ip;
-}
-
-
-
-$payload['buyer'] = [
-    'buyer_name' => $dadosPessoais['nome'],
-    'buyer_email' => $emailParaUsar,
-    'buyer_phone' => $telefoneLimpo,
-    'buyer_document' => $cpfLimpo,
-    'buyer_document_type' => 'cpf'
-];
-
-$auth = base64_encode(BLACKCAT_PUBLIC_KEY . ':' . BLACKCAT_SECRET_KEY);
-
-$ch = curl_init(BLACKCAT_API_URL);
-curl_setopt_array($ch, [
+// Fazer requisição
+$curl = curl_init();
+curl_setopt_array($curl, [
+    CURLOPT_URL => BLACKCAT_API_URL,
     CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_POST => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 30,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => 'POST',
+    CURLOPT_POSTFIELDS => json_encode($payload),
     CURLOPT_HTTPHEADER => [
-        'Authorization: Basic ' . $auth,
-        'Content-Type: application/json',
-        'Accept: application/json'
+        'accept: application/json',
+        'Authorization: Basic ' . $auth_value,
+        'content-type: application/json'
     ],
-    CURLOPT_POSTFIELDS => json_encode($payload, JSON_UNESCAPED_UNICODE),
-    CURLOPT_SSL_VERIFYPEER => true,
-    CURLOPT_TIMEOUT => 30
 ]);
 
-error_log('=== PIX PAYLOAD (Conforme Documentação Oficial + buyer para adquirente) ===');
-error_log(json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-error_log('=== Verificação do objeto buyer ===');
-error_log('Buyer existe: ' . (isset($payload['buyer']) ? 'SIM' : 'NÃO'));
-if (isset($payload['buyer'])) {
-    error_log('Buyer completo: ' . json_encode($payload['buyer'], JSON_PRETTY_PRINT));
-    error_log('Buyer phone: ' . ($payload['buyer']['buyer_phone'] ?? 'NÃO DEFINIDO'));
-}
-error_log('=== FIM PAYLOAD ===');
+error_log('=== PIX PAYLOAD ===');
+error_log(json_encode($payload, JSON_PRETTY_PRINT));
 
-$response = curl_exec($ch);
-$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-$error = curl_error($ch);
-curl_close($ch);
+$response = curl_exec($curl);
+$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+$error = curl_error($curl);
+curl_close($curl);
 
-error_log('PIX API Response - HTTP Code: ' . $httpCode);
-error_log('PIX API Response: ' . substr($response, 0, 500));
+error_log('PIX Response HTTP: ' . $httpCode);
+error_log('PIX Response: ' . substr($response, 0, 500));
 
 if ($error) {
     echo json_encode(['success' => false, 'error' => 'Erro na requisição: ' . $error]);
@@ -307,38 +160,25 @@ if ($error) {
 
 $responseData = json_decode($response, true);
 
-if ($responseData === null && json_last_error() !== JSON_ERROR_NONE) {
-    $isHtml = (strpos($response, '<!DOCTYPE') !== false || strpos($response, '<html') !== false);
-    
+if ($responseData === null) {
     echo json_encode([
         'success' => false,
-        'error' => $isHtml ? 'API retornou HTML em vez de JSON. Verifique a URL e credenciais.' : 'Resposta da API não é JSON válido.',
+        'error' => 'Resposta inválida da API',
         'httpCode' => $httpCode,
         'response' => substr($response, 0, 500)
     ]);
     exit;
 }
 
-
+// Verificar se tem QR Code na resposta
 $transaction = null;
 if (isset($responseData['data']) && is_array($responseData['data'])) {
     $transaction = $responseData['data'];
-} elseif (isset($responseData['id']) && isset($responseData['paymentMethod'])) {
+} elseif (isset($responseData['id'])) {
     $transaction = $responseData;
 }
 
-if ($httpCode === 200 && $transaction !== null) {
-
-    if (empty($transaction['pix']['qrcode'])) {
-        echo json_encode([
-            'success' => false,
-            'error' => 'QR Code não foi gerado pela API',
-            'httpCode' => $httpCode,
-            'details' => $transaction
-        ]);
-        exit;
-    }
-
+if ($transaction && isset($transaction['pix']['qrcode'])) {
     $_SESSION['pix_transaction_id'] = $transaction['id'];
     $_SESSION['pix_transaction_data'] = $transaction;
 
@@ -353,9 +193,8 @@ if ($httpCode === 200 && $transaction !== null) {
         'status' => $transaction['status'] ?? 'waiting_payment'
     ]);
 } else {
-
     $errorMessage = 'Erro ao criar transação PIX';
-    
+
     if (isset($responseData['message'])) {
         $errorMessage = $responseData['message'];
     } elseif (isset($responseData['error'])) {
@@ -363,16 +202,9 @@ if ($httpCode === 200 && $transaction !== null) {
             $errorMessage = $responseData['error'];
         } elseif (is_array($responseData['error']) && isset($responseData['error']['description'])) {
             $errorMessage = $responseData['error']['description'];
-
-            if (isset($responseData['error']['refusedReason'])) {
-                $refusedReason = $responseData['error']['refusedReason'];
-                if (isset($refusedReason['description'])) {
-                    $errorMessage = $refusedReason['description'];
-                }
-            }
         }
     }
-    
+
     echo json_encode([
         'success' => false,
         'error' => $errorMessage,

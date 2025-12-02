@@ -1,6 +1,11 @@
 <?php
 require_once __DIR__ . '/item/cart_helpers.php';
 
+// Evitar cache do navegador
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
 
 $cart = acai_get_cart();
 $totalCarrinho = acai_cart_total($cart);
@@ -451,29 +456,19 @@ html, body{background-color:var(--primaria) !important;}
         <script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script defer type="text/javascript" src="public/js/sweetalert.min.js"></script>
         <script defer type="text/javascript" src="public/js/select2.min.js"></script>
-        <script defer type="text/javascript" src="public/js/functions.js"></script>
+        <script defer type="text/javascript" src="public/js/functions.js?v=<?php echo time(); ?>"></script>
         <script defer>
 $(document).ready(function() {
 
+    // Limpar cache de transação antiga para evitar problemas
+    sessionStorage.removeItem('pixTransactionCreated');
+    sessionStorage.removeItem('pixTransactionTime');
+    sessionStorage.removeItem('pixTransactionId');
+    sessionStorage.removeItem('pixQrCode');
+    sessionStorage.removeItem('pixAmount');
+
     // Proteção contra chamadas duplicadas
     var pixAlreadyCreating = false;
-    var pixAlreadyCreated = sessionStorage.getItem('pixTransactionCreated');
-    var lastPixTime = parseInt(sessionStorage.getItem('pixTransactionTime') || '0');
-    var now = Date.now();
-
-    // Se já criou um PIX nos últimos 30 segundos, não criar outro
-    if (pixAlreadyCreated && (now - lastPixTime) < 30000) {
-        console.log('⚠️ PIX já foi criado recentemente. Evitando duplicação.');
-        var existingTransactionId = sessionStorage.getItem('pixTransactionId');
-        if (existingTransactionId) {
-            console.log('🔄 Retomando verificação da transação existente:', existingTransactionId);
-            // Esconder loading e mostrar área PIX se já existe
-            $('#pix-loading-overlay').hide();
-            $('section#pix').show();
-            startPaymentStatusCheck(existingTransactionId);
-        }
-        return;
-    }
 
     var dadosPessoais = JSON.parse(localStorage.getItem("dadosPessoais")) || {};
     var dadosFrete = JSON.parse(localStorage.getItem("dadosFrete")) || {};
@@ -512,56 +507,22 @@ $(document).ready(function() {
         pixAlreadyCreating = true;
 
         try {
-
             console.log('=== DEBUG PIX ===');
             console.log('Dados pessoais do localStorage:', dadosPessoais);
-            console.log('Telefone (celular):', dadosPessoais.celular);
-            console.log('Telefone (telefone):', dadosPessoais.telefone);
 
-            if (!dadosPessoais.nome || !dadosPessoais.email || !dadosPessoais.cpf) {
-                alert('Dados pessoais incompletos. Por favor, volte ao checkout e preencha todos os dados.');
-                window.location.href = 'checkout.php';
-                return;
-            }
-
-            if (!dadosPessoais.celular && !dadosPessoais.telefone) {
-                alert('Telefone é obrigatório. Por favor, volte ao checkout e preencha o telefone.');
-                console.error('ERRO: Telefone não encontrado nos dados pessoais!');
-                window.location.href = 'checkout.php';
-                return;
-            }
-
-            var telefone = dadosPessoais.celular || dadosPessoais.telefone || '';
-            var telefoneLimpo = telefone.replace(/\D/g, '');
-            
-            console.log('Telefone original:', telefone);
-            console.log('Telefone limpo:', telefoneLimpo);
-            console.log('Tamanho do telefone limpo:', telefoneLimpo.length);
-            
-            if (telefoneLimpo.length < 10) {
-                alert('Telefone inválido. Por favor, volte ao checkout e preencha um telefone válido.');
-                window.location.href = 'checkout.php';
-                return;
-            }
-
-            if (!dadosPessoais.celular && dadosPessoais.telefone) {
-                dadosPessoais.celular = dadosPessoais.telefone;
-            }
-            if (!dadosPessoais.telefone && dadosPessoais.celular) {
-                dadosPessoais.telefone = dadosPessoais.celular;
-            }
-
+            // Garantir que temos pelo menos valores padrão
+            dadosPessoais.nome = dadosPessoais.nome || 'Cliente';
             dadosPessoais.celular = dadosPessoais.celular || dadosPessoais.telefone || '';
             dadosPessoais.telefone = dadosPessoais.telefone || dadosPessoais.celular || '';
-            
+
             console.log('Dados pessoais antes de enviar:', dadosPessoais);
-            
+
             const payload = {
                 dadosPessoais: dadosPessoais,
                 dadosFrete: dadosFrete,
                 amount: amount
             };
-            
+
             console.log('Payload completo:', payload);
             
             const response = await fetch('api/create_pix.php', {

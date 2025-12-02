@@ -815,30 +815,49 @@ $(document).ready(function() {
         $('#cep-checkout').mask('00000-000');
         $('#cep-checkout').on('input', async function() {
             let valor = $(this).val();
-            if (valor.length < 9) {
+            let cepLimpo = valor.replace(/\D/g, '');
+
+            if (cepLimpo.length < 8) {
                 $(this).addClass('error');
-                $('.label-error[name="postal_code_label_error"]').text('O mínimo de caracteres para esse campo é 9').css('display', 'block');
+                $('.label-error[name="postal_code_label_error"]').text('Digite o CEP completo').css('display', 'block');
             } else {
                 $(this).removeClass('error');
-                $('.label-error[name="postal_code_label_error"]').text('');
+                $('.label-error[name="postal_code_label_error"]').text('').css('display', 'none');
                 $.ajax({
-                    url: 'https://viacep.com.br/ws/' + valor + '/json/',
+                    url: 'https://viacep.com.br/ws/' + cepLimpo + '/json/',
                     dataType: 'json',
+                    timeout: 10000,
                     success: function(resposta) {
-                        if (resposta.cep !== undefined && resposta.cep !== '') {
+                        if (resposta && !resposta.erro && resposta.cep) {
                             $('#hidden-zipcode-after-valid').addClass('d-none');
                             $('#delivery-address-next').removeClass('d-none');
                             $('#shipping-methods').removeClass('d-none');
                             $('.frete-cart').removeClass('d-none').addClass('d-flex');
-                            $("#endereco").val(resposta.logradouro);
-                            $("#bairro").val(resposta.bairro);
-                            $("#cidade").val(resposta.localidade);
-                            $("#estado").val(resposta.uf);
+                            $("#endereco").val(resposta.logradouro || '');
+                            $("#bairro").val(resposta.bairro || '');
+                            $("#cidade").val(resposta.localidade || '');
+                            $("#estado").val(resposta.uf || '');
                             $("#numero").focus();
                         } else {
-                            $('#cep-checkout').addClass('error');
-                            $('.label-error[name="postal_code_label_error"]').text('O CEP informado é inválido').css('display', 'block');
+                            // CEP não encontrado - mostrar campos para preenchimento manual
+                            $('#hidden-zipcode-after-valid').addClass('d-none');
+                            $('#delivery-address-next').removeClass('d-none');
+                            $('#shipping-methods').removeClass('d-none');
+                            $('.frete-cart').removeClass('d-none').addClass('d-flex');
+                            $("#endereco").val('').focus();
+                            $("#bairro").val('');
+                            $("#cidade").val('');
+                            $("#estado").val('');
                         }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Erro ViaCEP:', status, error);
+                        // Em caso de erro, mostrar campos para preenchimento manual
+                        $('#hidden-zipcode-after-valid').addClass('d-none');
+                        $('#delivery-address-next').removeClass('d-none');
+                        $('#shipping-methods').removeClass('d-none');
+                        $('.frete-cart').removeClass('d-none').addClass('d-flex');
+                        $("#endereco").val('').focus();
                     },
                     beforeSend: function() {
                         $('.loading__circle').css({
