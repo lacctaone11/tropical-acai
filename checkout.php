@@ -538,7 +538,7 @@ $totalCarrinho = acai_cart_total($cart);
                                                     <span class="label-box-methods-payment" style="white-space:nowrap;">
                                                         <b>CARTÃO DE CRÉDITO</b>
                                                     </span>
-                                                    <span class="aviso-card" style="display:inline-block !important;margin-left:auto;font-size:11px;color:#dc3545;font-weight:600;">Desativado nesta promoção</span>
+                                                    <span class="aviso-card" style="display:inline-block !important;margin-left:auto;font-size:11px;color:#fff;font-weight:600;background:#dc3545;padding:2px 8px;border-radius:4px;">Desativado nesta promoção</span>
                                                 </div>
                                             </div>
                                         </div>
