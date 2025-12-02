@@ -1,7 +1,7 @@
 <?php
 /**
- * Webhook para receber notificações da API TitansHub
- * 
+ * Webhook para receber notificações da API Black Cat Pagamentos
+ *
  * Este arquivo recebe notificações quando uma transação PIX é atualizada.
  * Configure a URL deste arquivo no campo 'postbackUrl' em api/create_pix.php
  */

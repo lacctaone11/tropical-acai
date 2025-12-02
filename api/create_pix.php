@@ -4,9 +4,10 @@ require_once __DIR__ . '/../item/cart_helpers.php';
 
 header('Content-Type: application/json');
 
-define('TITANSHUB_API_URL', 'https://api.titanshub.io/v1/transactions');
-define('TITANSHUB_PUBLIC_KEY', 'pk_zPl4SZSQDQs2VFNXXhSR7yVzoT9sBh4mkPquAcZjqriQczsX');
-define('TITANSHUB_SECRET_KEY', 'sk_uveRUOH7x4mxQMLJSOD-sh_igT5N9PSrzjmW0Q8qYb2CejuK');
+// Black Cat Pagamentos API
+define('BLACKCAT_API_URL', 'https://api.blackcatpagamentos.com/v1/transactions');
+define('BLACKCAT_PUBLIC_KEY', 'pk_jnbuj9JZy7pQJTdfahRmVpziMgQAIKNCMCDstmQ4pJthriVP');
+define('BLACKCAT_SECRET_KEY', 'sk_8vY_tuYwmV8q8hL37uafgrYL-Gyeef3WC5SLwhnp53dEko55');
 
 $input = file_get_contents('php://input');
 $dados = json_decode($input, true);
@@ -215,9 +216,9 @@ $payload['buyer'] = [
     'buyer_document_type' => 'cpf'
 ];
 
-$auth = base64_encode(TITANSHUB_PUBLIC_KEY . ':' . TITANSHUB_SECRET_KEY);
+$auth = base64_encode(BLACKCAT_PUBLIC_KEY . ':' . BLACKCAT_SECRET_KEY);
 
-$ch = curl_init(TITANSHUB_API_URL);
+$ch = curl_init(BLACKCAT_API_URL);
 curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_POST => true,

@@ -12,10 +12,24 @@ $totalCarrinho = acai_cart_total($cart);
     .checkout-header {
         background: linear-gradient(135deg, var(--primaria) 0%, #4a1d6b 100%);
         padding: 12px 0;
-        position: sticky;
+        position: fixed;
         top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
         z-index: 1000;
         box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+
+    /* Espaço para compensar o header fixo */
+    .faixa-topo {
+        margin-top: 69px;
+    }
+
+    @media (max-width: 768px) {
+        .faixa-topo {
+            margin-top: 65px;
+        }
     }
 
     .checkout-header .container {
@@ -96,6 +110,90 @@ $totalCarrinho = acai_cart_total($cart);
 
         .checkout-header .header-seguro span {
             display: none;
+        }
+    }
+
+    /* Carrinho colapsável no mobile */
+    .cart-toggle-header {
+        display: none;
+        background: linear-gradient(135deg, var(--primaria) 0%, #4a1d6b 100%);
+        color: #fff;
+        padding: 12px 15px;
+        border-radius: 10px;
+        cursor: pointer;
+        margin-bottom: 0;
+        align-items: center;
+        justify-content: space-between;
+        transition: all 0.3s ease;
+    }
+
+    .cart-toggle-header:hover {
+        opacity: 0.95;
+    }
+
+    .cart-toggle-header .cart-toggle-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .cart-toggle-header .cart-toggle-left i {
+        font-size: 18px;
+    }
+
+    .cart-toggle-header .cart-toggle-left span {
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .cart-toggle-header .cart-toggle-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .cart-toggle-header .cart-toggle-right .cart-total {
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .cart-toggle-header .cart-toggle-right .cart-arrow {
+        font-size: 14px;
+        transition: transform 0.3s ease;
+    }
+
+    .cart-toggle-header.expanded .cart-arrow {
+        transform: rotate(180deg);
+    }
+
+    #resume-cart-mobile-content {
+        transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
+        overflow: hidden;
+    }
+
+    @media (max-width: 992px) {
+        .cart-toggle-header {
+            display: flex;
+        }
+
+        #resume-social-proof-container {
+            margin-bottom: 15px;
+        }
+
+        #resume-cart .cart-section-container {
+            border-radius: 0 0 10px 10px;
+        }
+
+        #resume-cart-mobile-content.collapsed {
+            max-height: 0 !important;
+            opacity: 0;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+        }
+
+        #resume-cart-mobile-content.expanded {
+            max-height: 1000px;
+            opacity: 1;
         }
     }
 </style>
@@ -473,8 +571,19 @@ $totalCarrinho = acai_cart_total($cart);
                         </div>
                         <div id="resume-social-proof-container">
                             <div id="resume-cart">
+                                <!-- Toggle do Carrinho (Mobile) -->
+                                <div class="cart-toggle-header" id="cart-toggle-header" onclick="toggleCart()">
+                                    <div class="cart-toggle-left">
+                                        <i class="fa-solid fa-shopping-bag"></i>
+                                        <span>Ver meu pedido (<?php echo count($cart); ?> <?php echo count($cart) == 1 ? 'item' : 'itens'; ?>)</span>
+                                    </div>
+                                    <div class="cart-toggle-right">
+                                        <span class="cart-total">R$ <?php echo acai_format_money($totalCarrinho); ?></span>
+                                        <i class="fa-solid fa-chevron-down cart-arrow"></i>
+                                    </div>
+                                </div>
                                 <div class="bg-white cart-section-container">
-                                    <div id="resume-cart-mobile-content">
+                                    <div id="resume-cart-mobile-content" class="collapsed">
                                         <h3>SEU CARRINHO</h3>
                                         <div id="content-list-products">
                                             <?php if (empty($cart)): ?>
@@ -560,6 +669,18 @@ $totalCarrinho = acai_cart_total($cart);
         <script defer type="text/javascript" src="public/js/functions.js"></script>
         <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"5cb2a07379cd4eefbb95393e110dd461","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
         <script>
+        // Função para alternar o carrinho (colapsável)
+        function toggleCart() {
+            const cartContent = document.getElementById('resume-cart-mobile-content');
+            const cartToggleHeader = document.getElementById('cart-toggle-header');
+
+            if (cartContent && cartToggleHeader) {
+                cartContent.classList.toggle('collapsed');
+                cartContent.classList.toggle('expanded');
+                cartToggleHeader.classList.toggle('expanded');
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             // ========== ALTERNÂNCIA ENTRE PIX E CARTÃO ==========
             const pixBox = document.getElementById('pix_hipercash-box-pix');
