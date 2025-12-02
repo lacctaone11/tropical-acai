@@ -311,25 +311,11 @@ $totalCarrinho = acai_cart_total($cart);
                                         </div>
                                         <div id="personal-data-inputs">
                                             <div class="d-flex flex-col form-group ">
-                                                <label>E-mail</label>
-                                                <div class="input-container">
-                                                    <input required="" minlength="2" maxlength="250" id="email" placeholder="Ex.: seu.e-mail@gmail.com" name="email" class="input-default custom-input " type="email" autocomplete="off">
-                                                </div>
-                                                <span name="email_label_error" class="label-error">Error</span>
-                                            </div>
-                                            <div class="d-flex flex-col form-group ">
                                                 <label>Nome Completo</label>
                                                 <div class="input-container">
                                                     <input required="" minlength="2" maxlength="200" id="nome" placeholder="Informe seu nome completo" name="first_name" class="input-default custom-input " type="text" autocomplete="off">
                                                 </div>
                                                 <span name="first_name_label_error" class="label-error">Error</span>
-                                            </div>
-                                            <div class="d-flex flex-col form-group ">
-                                                <label>CPF</label>
-                                                <div class="input-container ">
-                                                    <input required="" minlength="14" maxlength="14" placeholder="000.000.000-00" name="doc" id="cpf" class="input-default custom-input" type="tel" autocomplete="off">
-                                                </div>
-                                                <span name="doc_label_error" class="label-error">Error</span>
                                             </div>
                                             <div class="flex flex-col form-group ">
                                                 <label>Celular</label>

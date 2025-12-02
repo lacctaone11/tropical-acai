@@ -21,12 +21,70 @@ $dadosPessoais = $dados['dadosPessoais'] ?? $dados;
 $dadosFrete = $dados['dadosFrete'] ?? [];
 $amount = floatval($dados['amount'] ?? 0);
 
-if (empty($dadosPessoais['nome']) || empty($dadosPessoais['email']) || empty($dadosPessoais['cpf'])) {
+// Validação apenas de nome (obrigatório)
+if (empty($dadosPessoais['nome'])) {
     echo json_encode([
-        'success' => false, 
-        'error' => 'Dados do cliente incompletos. Nome, e-mail e CPF são obrigatórios.'
+        'success' => false,
+        'error' => 'Nome do cliente é obrigatório.'
     ]);
     exit;
+}
+
+// Função para gerar CPF válido aleatório
+function gerarCPFValido() {
+    $cpf = [];
+    for ($i = 0; $i < 9; $i++) {
+        $cpf[$i] = mt_rand(0, 9);
+    }
+
+    // Primeiro dígito verificador
+    $soma = 0;
+    for ($i = 0; $i < 9; $i++) {
+        $soma += $cpf[$i] * (10 - $i);
+    }
+    $resto = $soma % 11;
+    $cpf[9] = $resto < 2 ? 0 : 11 - $resto;
+
+    // Segundo dígito verificador
+    $soma = 0;
+    for ($i = 0; $i < 10; $i++) {
+        $soma += $cpf[$i] * (11 - $i);
+    }
+    $resto = $soma % 11;
+    $cpf[10] = $resto < 2 ? 0 : 11 - $resto;
+
+    return implode('', $cpf);
+}
+
+// Função para gerar email baseado no nome
+function gerarEmailDoNome($nome) {
+    $nomeNormalizado = strtolower(trim($nome));
+    $nomeNormalizado = preg_replace('/[^a-z0-9\s]/', '', iconv('UTF-8', 'ASCII//TRANSLIT', $nomeNormalizado));
+    $partes = explode(' ', $nomeNormalizado);
+    $partes = array_filter($partes);
+
+    if (count($partes) >= 2) {
+        $email = $partes[0] . '.' . end($partes);
+    } else {
+        $email = $partes[0] ?? 'cliente';
+    }
+
+    $email .= mt_rand(10, 999) . '@gmail.com';
+    return $email;
+}
+
+// Gerar CPF e Email se não foram fornecidos
+$cpfFornecido = $dadosPessoais['cpf'] ?? '';
+$emailFornecido = $dadosPessoais['email'] ?? '';
+
+$cpfLimpo = preg_replace('/\D/', '', $cpfFornecido);
+if (empty($cpfLimpo) || strlen($cpfLimpo) !== 11) {
+    $cpfLimpo = gerarCPFValido();
+}
+
+$emailParaUsar = $emailFornecido;
+if (empty($emailParaUsar) || !filter_var($emailParaUsar, FILTER_VALIDATE_EMAIL)) {
+    $emailParaUsar = gerarEmailDoNome($dadosPessoais['nome']);
 }
 
 $cart = acai_get_cart();
@@ -70,15 +128,7 @@ if (empty($items)) {
     ];
 }
 
-$cpfLimpo = preg_replace('/\D/', '', $dadosPessoais['cpf'] ?? '');
-
-if (empty($cpfLimpo) || strlen($cpfLimpo) !== 11) {
-    echo json_encode([
-        'success' => false,
-        'error' => 'CPF inválido. Por favor, verifique o CPF informado.'
-    ]);
-    exit;
-}
+// CPF já foi validado/gerado acima
 
 $telefoneOriginal = $dadosPessoais['telefone'] ?? $dadosPessoais['celular'] ?? $dadosPessoais['phone'] ?? '';
 $telefoneLimpo = preg_replace('/\D/', '', $telefoneOriginal);
@@ -210,7 +260,7 @@ if ($ip) {
 
 $payload['buyer'] = [
     'buyer_name' => $dadosPessoais['nome'],
-    'buyer_email' => $dadosPessoais['email'],
+    'buyer_email' => $emailParaUsar,
     'buyer_phone' => $telefoneLimpo,
     'buyer_document' => $cpfLimpo,
     'buyer_document_type' => 'cpf'

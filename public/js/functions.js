@@ -700,7 +700,6 @@ $(document).ready(function() {
         return palavras.length >= 2 && nomeTrimmed.length >= 2;
     }
     jQuery(function($) {
-        $('#cpf').mask('000.000.000-00');
         $('#cnpj').mask('00.000.000/0000-00');
         $('#nascimento').mask('00/00/0000');
 
@@ -721,17 +720,6 @@ $(document).ready(function() {
             }
         });
 
-        $('#cpf').on('input', function() {
-            let valor = $(this).val();
-            if (valor.length < 14 || !validarCPF(valor)) {
-                $(this).addClass('error');
-                $('.label-error[name="doc_label_error"]').text('O CPF informado é inválido ou incompleto').css('display', 'block');
-            } else {
-                $(this).removeClass('error');
-                $('.label-error[name="doc_label_error"]').text('').css('display', 'none');
-            }
-        });
-
         $('#nome').on('input', function() {
             let valor = $(this).val();
             if (!validarNome(valor)) {
@@ -740,17 +728,6 @@ $(document).ready(function() {
             } else {
                 $(this).removeClass('error');
                 $('.label-error[name="first_name_label_error"]').text('').css('display', 'none');
-            }
-        });
-
-        $('#email').on('input', function() {
-            let valor = $(this).val();
-            if (!validarEmail(valor)) {
-                $(this).addClass('error');
-                $('.label-error[name="email_label_error"]').text('O E-mail informado é inválido').css('display', 'block');
-            } else {
-                $(this).removeClass('error');
-                $('.label-error[name="email_label_error"]').text('').css('display', 'none');
             }
         });
 
@@ -768,18 +745,17 @@ $(document).ready(function() {
         $(document).on('click', 'button#step1-checkout-finish', async function(e) {
             e.preventDefault();
             e.stopPropagation();
-            
+
             let is_valid = true;
 
-            if (!validarCPF($('#cpf').val()) || !validarNome($('#nome').val()) || !validarEmail($('#email').val()) || $('#telefone').val().length < 15) {
+            // Validação apenas de nome e telefone
+            if (!validarNome($('#nome').val()) || $('#telefone').val().length < 15) {
                 is_valid = false;
             }
 
             if (is_valid) {
                 localStorage.setItem("dadosPessoais", JSON.stringify({
-                    email: $('#email').val(),
                     nome: $('#nome').val(),
-                    cpf: $('#cpf').val(),
                     celular: $('#telefone').val()
                 }));
 
@@ -792,9 +768,7 @@ $(document).ready(function() {
 
                 $('#step1-summary-container').html(`
                 <p style="padding-top: 0.6rem; font-size: 15px"><b>Nome completo:</b> ${dadosPessoais.nome}</p>
-                <p style="padding-top: 0.6rem; font-size: 15px"><b>CPF:</b> ${dadosPessoais.cpf}</p>
                 <p style="padding-top: 0.6rem; font-size: 15px"><b>Celular:</b> ${dadosPessoais.celular}</p>
-                <p style="padding-top: 0.6rem; font-size: 15px"><b>E-mail:</b> ${dadosPessoais.email}</p>
             `);
 
                 $('.step2-checkout').addClass('enable_step').removeClass('validated enable_step_edit disabled_step').removeClass('disabled_step');
