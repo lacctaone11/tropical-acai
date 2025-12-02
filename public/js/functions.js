@@ -358,12 +358,15 @@ $(document).ready(function() {
             titleAdicional.find('.contador').addClass('d-none');
             titleAdicional.find('.check-options').removeClass('d-none');
 
-            const $next = adicional.nextAll('.adicionais').first();
-            if ($next.length) {
-                const headerOffset = 80;
-                $('html, body').animate({
-                    scrollTop: Math.max(0, $next.offset().top - headerOffset)
-                }, 600);
+            // Busca o próximo título de seção (.title-adicional) para melhor UX no mobile
+            const $nextTitle = adicional.nextAll('.title-adicional').first();
+            if ($nextTitle.length) {
+                const headerOffset = 100; // Offset maior para mobile
+                setTimeout(function() {
+                    $('html, body').animate({
+                        scrollTop: Math.max(0, $nextTitle.offset().top - headerOffset)
+                    }, 400);
+                }, 150); // Pequeno delay para garantir que o DOM está atualizado
             }
         } else {
             adicional.find('.option-item').removeClass('disabled');
