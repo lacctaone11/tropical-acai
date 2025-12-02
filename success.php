@@ -501,43 +501,7 @@ $totalCarrinho = acai_cart_total($cart);
 
                                 localStorage.setItem('totalCarrinho', '10.90');
 
-                                var dadosPessoais = JSON.parse(localStorage.getItem("dadosPessoais")) || {};
-                                var dadosFrete = JSON.parse(localStorage.getItem("dadosFrete")) || {};
-
-                                if (!dadosPessoais.nome || !dadosPessoais.email || !dadosPessoais.cpf) {
-                                    if (typeof Swal !== 'undefined') {
-                                        Swal.fire({
-                                            icon: 'error',
-                                            title: 'Dados incompletos',
-                                            text: 'Por favor, complete seus dados pessoais no checkout antes de continuar.',
-                                            confirmButtonText: 'OK'
-                                        }).then(() => {
-                                            window.location.href = 'checkout.php';
-                                        });
-                                    } else {
-                                        alert('Por favor, complete seus dados pessoais no checkout antes de continuar.');
-                                        window.location.href = 'checkout.php';
-                                    }
-                                    return;
-                                }
-
-                                if (!dadosPessoais.celular && !dadosPessoais.telefone) {
-                                    if (typeof Swal !== 'undefined') {
-                                        Swal.fire({
-                                            icon: 'error',
-                                            title: 'Telefone obrigatório',
-                                            text: 'Por favor, informe seu telefone no checkout antes de continuar.',
-                                            confirmButtonText: 'OK'
-                                        }).then(() => {
-                                            window.location.href = 'checkout.php';
-                                        });
-                                    } else {
-                                        alert('Por favor, informe seu telefone no checkout antes de continuar.');
-                                        window.location.href = 'checkout.php';
-                                    }
-                                    return;
-                                }
-
+                                // Ir direto para o PIX - CPF e email são gerados automaticamente na API
                                 window.location.href = 'pix.php';
                             }
                         },
