@@ -1,4 +1,18 @@
-<?php include 'includes/config_empresa.php'; ?>
+<?php
+$empresa = [
+    'nome_empresa' => 'GUIA DE JOINVILLE LTDA',
+    'cnpj' => '95.793.717/0001-44',
+    'endereco' => 'R Gustavo Grossembacher, 83 - Sala B',
+    'bairro' => 'Centro',
+    'cidade' => 'Joinville',
+    'estado' => 'SC',
+    'cep' => '89201-230',
+    'telefone' => '(47) 98117-8064',
+    'telefone_link' => '5547981178064',
+    'email' => 'proconta@netiville.com.br',
+    'nome_fantasia' => 'Tropical Açaí'
+];
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>

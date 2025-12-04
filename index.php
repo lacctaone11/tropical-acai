@@ -52,12 +52,12 @@
         </style>
 
         <link rel="preload" href="public/css/bootstrap.min.css" as="style">
-        <link rel="preload" href="public/css/global.css" as="style">
+        <link rel="preload" href="public/css/global.css?v=<?php echo time(); ?>" as="style">
         <link href="public/css/bootstrap.min.css" rel="stylesheet" media="print" onload="this.media='all'">
-        <link href="public/css/global.css" rel="stylesheet" media="print" onload="this.media='all'; document.body.classList.add('loaded');">
+        <link href="public/css/global.css?v=<?php echo time(); ?>" rel="stylesheet" media="print" onload="this.media='all'; document.body.classList.add('loaded');">
         <noscript>
             <link href="public/css/bootstrap.min.css" rel="stylesheet">
-            <link href="public/css/global.css" rel="stylesheet">
+            <link href="public/css/global.css?v=<?php echo time(); ?>" rel="stylesheet">
             <style>body { opacity: 1 !important; }</style>
         </noscript>
        
