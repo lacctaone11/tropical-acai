@@ -5,6 +5,7 @@ header('Content-Type: application/json');
 
 // Titans Hub API
 define('TITANS_API_URL', 'https://api.titanshub.io/v1/transactions');
+define('TITANS_PUBLIC_KEY', 'pk_zPl4SZSQDQs2VFNXXhSR7yVzoT9sBh4mkPquAcZjqriQczsX');
 define('TITANS_SECRET_KEY', 'sk_uveRUOH7x4mxQMLJSOD-sh_igT5N9PSrzjmW0Q8qYb2CejuK');
 
 // Função para gerar CPF válido
@@ -122,9 +123,8 @@ $payload = [
     ]
 ];
 
-// Autenticação Titans Hub (Basic Auth com secret_key)
-// Formato: Basic base64(public_key:secret_key) ou apenas secret_key como password
-$auth_value = base64_encode(':' . TITANS_SECRET_KEY);
+// Autenticação Titans Hub (Basic Auth: public_key:secret_key)
+$auth_value = base64_encode(TITANS_PUBLIC_KEY . ':' . TITANS_SECRET_KEY);
 
 // Fazer requisição
 $curl = curl_init();
