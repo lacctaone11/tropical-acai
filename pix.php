@@ -524,13 +524,22 @@ $(document).ready(function() {
             const response = await fetch('api/create_pix.php', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(payload)
             });
-            
-            const data = await response.json();
+
+            const responseText = await response.text();
+            console.log('Response raw:', responseText);
+
+            let data;
+            try {
+                data = JSON.parse(responseText);
+            } catch (e) {
+                console.error('Erro ao parsear JSON:', e);
+                console.error('Resposta recebida:', responseText);
+                throw new Error('Resposta inválida do servidor: ' + responseText.substring(0, 200));
+            }
             
             if (data.success) {
 
