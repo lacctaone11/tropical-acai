@@ -93,7 +93,7 @@ try {
         'paymentMethod' => 'pix',
         'amount' => $amountInCents,
         'items' => [[
-            'title' => 'Pedido Tropical Açaí',
+            'title' => 'Kit Conjunto Infantil',
             'quantity' => 1,
             'unitPrice' => $amountInCents,
             'tangible' => false,
