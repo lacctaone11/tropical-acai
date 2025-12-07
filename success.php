@@ -320,13 +320,14 @@ $totalCarrinho = acai_cart_total($cart);
                 $('#order-address').text(enderecoTexto);
             }
 
-            // Mostrar popup de upsell após 3 segundos
+            // Mostrar popup de upsell após 2 segundos
             setTimeout(function() {
                 Swal.fire({
-                    title: '<span style="color: #64268c;">🎉 Oferta Exclusiva!</span>',
+                    title: '<span style="color: #64268c;">Ei, espera! 🎁</span>',
                     html: `
                         <div style="text-align: left;">
-                            <p style="text-align: center; margin-bottom: 15px; color: #666;">Leve os 3 por um preço especial:</p>
+                            <p style="text-align: center; margin-bottom: 15px; color: #444; font-weight: 500;">Preparamos algo especial só pra você!</p>
+                            <p style="text-align: center; margin-bottom: 15px; color: #666; font-size: 13px;">Leve os 3 por um preço exclusivo:</p>
 
                             <div style="display: flex; align-items: center; padding: 10px; background: #f8f9fa; border-radius: 8px; margin-bottom: 8px;">
                                 <img src="public/images/brownie_gelado.webp" alt="Brownie" style="width: 50px; height: 50px; border-radius: 6px; object-fit: cover; margin-right: 10px;">
@@ -441,7 +442,7 @@ $totalCarrinho = acai_cart_total($cart);
                         });
                     }
                 });
-            }, 3000);
+            }, 2000);
         });
     </script>
 </body>
