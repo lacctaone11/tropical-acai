@@ -510,11 +510,11 @@ $totalCarrinho = acai_cart_total($cart);
             <div class="upsell-summary">
                 <div class="upsell-economy">
                     <span>Economia de</span>
-                    <strong>R$ 32,80</strong>
+                    <strong>R$ 23,80</strong>
                 </div>
                 <div class="upsell-total">
                     <span>Total do combo:</span>
-                    <strong>R$ 10,90</strong>
+                    <strong>R$ 19,90</strong>
                 </div>
             </div>
 
@@ -601,7 +601,7 @@ $totalCarrinho = acai_cart_total($cart);
                             if (index >= productIds.length) {
                                 console.log('✅ Todos os produtos adicionados! Redirecionando para PIX...');
                                 $('.loading__circle').css('display', 'none');
-                                localStorage.setItem('totalCarrinho', '10.90');
+                                localStorage.setItem('totalCarrinho', '19.90');
                                 window.location.href = 'pix.php';
                                 return;
                             }
