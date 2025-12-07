@@ -469,8 +469,8 @@ $totalCarrinho = acai_cart_total($cart);
                         <h4>Brownie Gelado</h4>
                         <span class="upsell-item-desc">Acompanhamento perfeito para seu açaí</span>
                         <div class="upsell-item-prices">
-                            <span class="price-old">R$ 13,90</span>
-                            <span class="price-promo">R$ 6,90</span>
+                            <span class="price-old">R$ 19,90</span>
+                            <span class="price-promo">R$ 13,90</span>
                         </div>
                     </div>
                     <i class="fa-solid fa-circle-check upsell-check"></i>
@@ -484,8 +484,8 @@ $totalCarrinho = acai_cart_total($cart);
                         <h4>Açaí Turbo</h4>
                         <span class="upsell-item-desc">+20% de volume e textura mais gelada</span>
                         <div class="upsell-item-prices">
-                            <span class="price-old">R$ 11,90</span>
-                            <span class="price-promo">R$ 5,90</span>
+                            <span class="price-old">R$ 12,90</span>
+                            <span class="price-promo">R$ 11,90</span>
                         </div>
                     </div>
                     <i class="fa-solid fa-circle-check upsell-check"></i>
@@ -499,8 +499,8 @@ $totalCarrinho = acai_cart_total($cart);
                         <h4>Combo do Chef</h4>
                         <span class="upsell-item-desc">Açaí + Brownie + Camada surpresa</span>
                         <div class="upsell-item-prices">
-                            <span class="price-old">R$ 17,90</span>
-                            <span class="price-promo">R$ 8,90</span>
+                            <span class="price-old">R$ 25,90</span>
+                            <span class="price-promo">R$ 17,90</span>
                         </div>
                     </div>
                     <i class="fa-solid fa-circle-check upsell-check"></i>
@@ -510,7 +510,7 @@ $totalCarrinho = acai_cart_total($cart);
             <div class="upsell-summary">
                 <div class="upsell-economy">
                     <span>Economia de</span>
-                    <strong>R$ 23,80</strong>
+                    <strong>R$ 38,80</strong>
                 </div>
                 <div class="upsell-total">
                     <span>Total do combo:</span>
