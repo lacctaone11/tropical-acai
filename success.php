@@ -17,8 +17,7 @@ $totalCarrinho = acai_cart_total($cart);
     color: #438f70;
     padding: 30px;
     text-align: center;
-    
-    
+    border-radius: 0 0 10px 10px;
 }
     .success-message h1 {
         font-size: 18px;
@@ -45,170 +44,27 @@ $totalCarrinho = acai_cart_total($cart);
             opacity: 1;
         }
     }
-    .orderBup {
+    .header-success {
+        text-align: center;
+        padding: 20px 15px 10px;
         background: white;
-        padding: 20px;
-        border-radius: 0 0 10px 10px;
+        border-radius: 10px 10px 0px 0px;
     }
-    /* Upsell Item List */
-    .upsell-item-list {
-        margin: 15px 0;
+    .header-success .logo {
+        margin-bottom: 20px;
+        width: 50px;
+        height: 50px;
     }
-    .upsell-item {
-        display: flex;
-        align-items: center;
-        padding: 12px;
-        background: #f8f9fa;
-        border-radius: 10px;
-        margin-bottom: 10px;
-        border: 2px solid #e9ecef;
-        position: relative;
-    }
-    .upsell-item-img {
-        width: 60px;
-        height: 60px;
-        border-radius: 8px;
-        overflow: hidden;
-        flex-shrink: 0;
-        margin-right: 12px;
-    }
-    .upsell-item-img img {
+    .header-success .logo img {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        border-radius: 50%;
     }
-    .upsell-item-info {
-        flex: 1;
+    .order-info {
+        background: white;
+        padding: 25px;
     }
-    .upsell-item-info h4 {
-        font-size: 14px;
-        font-weight: 700;
-        color: #2b2b2b;
-        margin: 0 0 4px;
-    }
-    .upsell-item-desc {
-        font-size: 12px;
-        color: #666;
-        display: block;
-        margin-bottom: 6px;
-    }
-    .upsell-item-prices {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    .upsell-item-prices .price-old {
-        font-size: 12px;
-        color: #999;
-        text-decoration: line-through;
-    }
-    .upsell-item-prices .price-promo {
-        font-size: 14px;
-        font-weight: 700;
-        color: var(--primaria);
-    }
-    .upsell-check {
-        color: #28a745;
-        font-size: 22px;
-        margin-left: 10px;
-    }
-    /* Upsell Summary */
-    .upsell-summary {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        border-radius: 10px;
-        padding: 15px;
-        margin-top: 15px;
-    }
-    .upsell-economy {
-        text-align: center;
-    }
-    .upsell-economy span {
-        display: block;
-        font-size: 12px;
-        color: #666;
-    }
-    .upsell-economy strong {
-        font-size: 18px;
-        color: #dc3545;
-    }
-    .upsell-total {
-        background: #28a745;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 8px;
-        text-align: center;
-    }
-    .upsell-total span {
-        display: block;
-        font-size: 11px;
-        opacity: 0.9;
-    }
-    .upsell-total strong {
-        font-size: 20px;
-        font-weight: 700;
-    }
-    .btn-comprar-upsell {
-        background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
-        color: white;
-        border: none;
-        padding: 18px 40px;
-        font-size: 18px;
-        font-weight: 700;
-        text-transform: uppercase;
-        border-radius: 10px;
-        cursor: pointer;
-        width: 100%;
-        margin-top: 15px;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
-    }
-    .btn-comprar-upsell:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
-    }
-    .btn-comprar-upsell:active {
-        transform: translateY(0);
-    }
-    .btn-comprar-upsell:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-    }
-    .upsell-info-text {
-        text-align: center;
-        font-size: 13px;
-        color: #666;
-        margin: 12px 0 0;
-    }
-    .upsell-info-text i {
-        color: var(--primaria);
-        margin-right: 5px;
-    }
-    .header-success {
-    text-align: center;
-    
-    padding: 20px 15px 10px;
-    background: white;
-    border-radius: 10px 10px 0px 0px;
-}
-    .header-success .logo {
-    margin-bottom: 20px;
-    width: 50px;
-    height: 50px;
-}
-    .header-success .logo img {
-            width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-    }
-  .order-info {
-    background: white;
-    padding: 25px;
-    
-}
     .order-info h3 {
         color: var(--primaria);
         font-size: 20px;
@@ -245,34 +101,13 @@ $totalCarrinho = acai_cart_total($cart);
         margin-bottom: 5px;
     }
     .divisor {
-    display: flex;
-    align-items: center;
-    background: white;
-}
+        display: flex;
+        align-items: center;
+        background: white;
+    }
     .info-item-content span {
         color: #666;
         font-size: 14px;
-    }
-    .delivery-time {
-        background: linear-gradient(135deg, #64268c 0%, #4a1d6b 100%);
-        color: white;
-        padding: 20px;
-        border-radius: 10px;
-        text-align: center;
-        margin-top: 20px;
-    }
-    .delivery-time i {
-        font-size: 32px;
-        margin-bottom: 10px;
-    }
-    .delivery-time strong {
-        display: block;
-        font-size: 24px;
-        margin-top: 10px;
-    }
-    .delivery-time span {
-        font-size: 16px;
-        opacity: 0.9;
     }
 </style>
 <!DOCTYPE html>
@@ -392,32 +227,30 @@ $totalCarrinho = acai_cart_total($cart);
             <div class="logo">
                 <img src="public/images/logo_acai.webp" alt="Tropical Açaí" width="200" height="200" loading="lazy">
             </div>
-           
         </div>
-          <div class="divisor">
-                    <div>
-                        <svg width="15" height="30" viewBox="0 0 15 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <mask id="path-1-inside-1_2805_43738" fill="white">
-                                <path d="M0 0C8.28427 0 15 6.71573 15 15C15 23.2843 8.28427 30 0 30V0Z"></path>
-                            </mask>
-                            <path d="M0 0C8.28427 0 15 6.71573 15 15C15 23.2843 8.28427 30 0 30V0Z" fill="var(--primaria)"></path>
-                            <path d="M0 -1C8.83656 -1 16 6.16344 16 15H14C14 7.26801 7.73199 1 0 1V-1ZM16 15C16 23.8366 8.83656 31 0 31V29C7.73199 29 14 22.732 14 15H16ZM0 30V0V30ZM0 -1C8.83656 -1 16 6.16344 16 15C16 23.8366 8.83656 31 0 31V29C7.73199 29 14 22.732 14 15C14 7.26801 7.73199 1 0 1V-1Z" fill="var(--primaria)" mask="url(#path-1-inside-1_2805_43738)"></path>
-                        </svg>
-                    </div>
-                    <svg width="650" height="1" viewBox="0 0 650 1" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <line y1="0.5" x2="650" y2="0.5" stroke="var(--primaria)" stroke-dasharray="8 8"></line>
-                    </svg>
-                    <div>
-                        <svg width="15" height="30" viewBox="0 0 15 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <mask id="path-1-inside-1_2805_43741" fill="white">
-                                <path d="M15 30C6.71573 30 -5.87108e-07 23.2843 -1.31134e-06 15C-2.03558e-06 6.71573 6.71573 7.24234e-07 15 0L15 30Z"></path>
-                            </mask>
-                            <path d="M15 30C6.71573 30 -5.87108e-07 23.2843 -1.31134e-06 15C-2.03558e-06 6.71573 6.71573 7.24234e-07 15 0L15 30Z" fill="var(--primaria)"></path>
-                            <path d="M15 31C6.16344 31 -1 23.8366 -1 15L0.999999 15C0.999999 22.732 7.26801 29 15 29L15 31ZM-1 15C-1 6.16345 6.16344 -0.999999 15 -1L15 1C7.26801 1 0.999998 7.26801 0.999999 15L-1 15ZM15 0L15 30L15 0ZM15 31C6.16344 31 -1 23.8366 -1 15C-1 6.16345 6.16344 -0.999999 15 -1L15 1C7.26801 1 0.999998 7.26801 0.999999 15C0.999999 22.732 7.26801 29 15 29L15 31Z" mask="url(#path-1-inside-1_2805_43741)"></path>
-                        </svg>
-                    </div>
-                </div>
-       
+        <div class="divisor">
+            <div>
+                <svg width="15" height="30" viewBox="0 0 15 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <mask id="path-1-inside-1_2805_43738" fill="white">
+                        <path d="M0 0C8.28427 0 15 6.71573 15 15C15 23.2843 8.28427 30 0 30V0Z"></path>
+                    </mask>
+                    <path d="M0 0C8.28427 0 15 6.71573 15 15C15 23.2843 8.28427 30 0 30V0Z" fill="var(--primaria)"></path>
+                    <path d="M0 -1C8.83656 -1 16 6.16344 16 15H14C14 7.26801 7.73199 1 0 1V-1ZM16 15C16 23.8366 8.83656 31 0 31V29C7.73199 29 14 22.732 14 15H16ZM0 30V0V30ZM0 -1C8.83656 -1 16 6.16344 16 15C16 23.8366 8.83656 31 0 31V29C7.73199 29 14 22.732 14 15C14 7.26801 7.73199 1 0 1V-1Z" fill="var(--primaria)" mask="url(#path-1-inside-1_2805_43738)"></path>
+                </svg>
+            </div>
+            <svg width="650" height="1" viewBox="0 0 650 1" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <line y1="0.5" x2="650" y2="0.5" stroke="var(--primaria)" stroke-dasharray="8 8"></line>
+            </svg>
+            <div>
+                <svg width="15" height="30" viewBox="0 0 15 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <mask id="path-1-inside-1_2805_43741" fill="white">
+                        <path d="M15 30C6.71573 30 -5.87108e-07 23.2843 -1.31134e-06 15C-2.03558e-06 6.71573 6.71573 7.24234e-07 15 0L15 30Z"></path>
+                    </mask>
+                    <path d="M15 30C6.71573 30 -5.87108e-07 23.2843 -1.31134e-06 15C-2.03558e-06 6.71573 6.71573 7.24234e-07 15 0L15 30Z" fill="var(--primaria)"></path>
+                    <path d="M15 31C6.16344 31 -1 23.8366 -1 15L0.999999 15C0.999999 22.732 7.26801 29 15 29L15 31ZM-1 15C-1 6.16345 6.16344 -0.999999 15 -1L15 1C7.26801 1 0.999998 7.26801 0.999999 15L-1 15ZM15 0L15 30L15 0ZM15 31C6.16344 31 -1 23.8366 -1 15C-1 6.16345 6.16344 -0.999999 15 -1L15 1C7.26801 1 0.999998 7.26801 0.999999 15C0.999999 22.732 7.26801 29 15 29L15 31Z" mask="url(#path-1-inside-1_2805_43741)"></path>
+                </svg>
+            </div>
+        </div>
 
         <div class="success-message">
             <div class="success-icon">
@@ -428,7 +261,6 @@ $totalCarrinho = acai_cart_total($cart);
         </div>
 
         <div class="order-info">
-          
             <div class="info-item">
                 <i class="fa-solid fa-user"></i>
                 <div class="info-item-content">
@@ -436,7 +268,7 @@ $totalCarrinho = acai_cart_total($cart);
                     <span id="order-customer-name">-</span>
                 </div>
             </div>
-           
+
             <div class="info-item">
                 <i class="fa-solid fa-location-dot"></i>
                 <div class="info-item-content">
@@ -451,74 +283,12 @@ $totalCarrinho = acai_cart_total($cart);
                     <span class="order-address">40 minutos</span>
                 </div>
             </div>
-            
-        </div>
-
-        <div class="orderBup">
-            <span class="title-orderBump">
-                <strong>🎉 Oferta Exclusiva!</strong>
-                Leve os 3 por um preço especial:
-            </span>
-
-            <div class="upsell-item-list">
-                <div class="upsell-item">
-                    <div class="upsell-item-img">
-                        <img src="public/images/brownie_gelado.webp" alt="Brownie Gelado">
-                    </div>
-                    <div class="upsell-item-info">
-                        <h4>Brownie Gelado</h4>
-                        <span class="upsell-item-desc">Acompanhamento perfeito para seu açaí</span>
-                    </div>
-                    <i class="fa-solid fa-circle-check upsell-check"></i>
-                </div>
-
-                <div class="upsell-item">
-                    <div class="upsell-item-img">
-                        <img src="public/images/textura.webp" alt="Açaí Turbo">
-                    </div>
-                    <div class="upsell-item-info">
-                        <h4>Açaí Turbo</h4>
-                        <span class="upsell-item-desc">+20% de volume e textura mais gelada</span>
-                    </div>
-                    <i class="fa-solid fa-circle-check upsell-check"></i>
-                </div>
-
-                <div class="upsell-item">
-                    <div class="upsell-item-img">
-                        <img src="public/images/combo_chef.webp" alt="Combo do Chef">
-                    </div>
-                    <div class="upsell-item-info">
-                        <h4>Combo do Chef</h4>
-                        <span class="upsell-item-desc">Açaí + Brownie + Camada surpresa</span>
-                    </div>
-                    <i class="fa-solid fa-circle-check upsell-check"></i>
-                </div>
-            </div>
-
-            <div class="upsell-summary">
-                <div class="upsell-economy">
-                    <span>Economia de</span>
-                    <strong>R$ 38,80</strong>
-                </div>
-                <div class="upsell-total">
-                    <span>Total do combo:</span>
-                    <strong>R$ 19,90</strong>
-                </div>
-            </div>
-
-            <button type="button" class="btn-comprar-upsell" id="btn-comprar-upsell">
-                <i class="fa-solid fa-bolt"></i> Aproveitar Oferta
-            </button>
-
-            <p class="upsell-info-text">
-                <i class="fa-solid fa-truck-fast"></i> Entrega junto com seu pedido
-            </p>
         </div>
     </div>
 
     <script type="text/javascript" src="public/js/jquery.min.js"></script>
     <script defer type="text/javascript" src="public/js/bootstrap.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script defer type="text/javascript" src="public/js/sweetalert.min.js"></script>
     <script defer type="text/javascript" src="public/js/functions.js"></script>
     <script>
@@ -541,12 +311,6 @@ $totalCarrinho = acai_cart_total($cart);
             if (dadosPessoais.nome) {
                 $('#order-customer-name').text(dadosPessoais.nome);
             }
-            if (dadosPessoais.email) {
-                $('#order-customer-email').text(dadosPessoais.email);
-            }
-            if (dadosPessoais.cpf) {
-                $('#order-customer-cpf').text(dadosPessoais.cpf);
-            }
 
             if (dadosFrete.cep) {
                 var enderecoTexto = `${dadosFrete.endereco}, ${dadosFrete.numero} - ${dadosFrete.bairro}, ${dadosFrete.cidade} - ${dadosFrete.estado}, CEP: ${dadosFrete.cep}`;
@@ -556,80 +320,129 @@ $totalCarrinho = acai_cart_total($cart);
                 $('#order-address').text(enderecoTexto);
             }
 
-            var hoje = new Date();
-            var dataFormatada = hoje.toLocaleDateString('pt-BR', { 
-                day: '2-digit', 
-                month: 'long', 
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-            $('#order-date').text(dataFormatada);
+            // Mostrar popup de upsell após 3 segundos
+            setTimeout(function() {
+                Swal.fire({
+                    title: '<span style="color: #64268c;">🎉 Oferta Exclusiva!</span>',
+                    html: `
+                        <div style="text-align: left;">
+                            <p style="text-align: center; margin-bottom: 15px; color: #666;">Leve os 3 por um preço especial:</p>
 
-            $('#btn-comprar-upsell').on('click', function() {
-                const btn = $(this);
-                const originalText = btn.html();
+                            <div style="display: flex; align-items: center; padding: 10px; background: #f8f9fa; border-radius: 8px; margin-bottom: 8px;">
+                                <img src="public/images/brownie_gelado.webp" alt="Brownie" style="width: 50px; height: 50px; border-radius: 6px; object-fit: cover; margin-right: 10px;">
+                                <div style="flex: 1;">
+                                    <strong style="font-size: 13px; color: #2b2b2b;">Brownie Gelado</strong>
+                                    <p style="font-size: 11px; color: #666; margin: 2px 0 0;">Acompanhamento perfeito para seu açaí</p>
+                                </div>
+                                <i class="fa-solid fa-circle-check" style="color: #28a745; font-size: 18px;"></i>
+                            </div>
 
-                console.log('🛒 Iniciando compra do upsell...');
+                            <div style="display: flex; align-items: center; padding: 10px; background: #f8f9fa; border-radius: 8px; margin-bottom: 8px;">
+                                <img src="public/images/textura.webp" alt="Açaí Turbo" style="width: 50px; height: 50px; border-radius: 6px; object-fit: cover; margin-right: 10px;">
+                                <div style="flex: 1;">
+                                    <strong style="font-size: 13px; color: #2b2b2b;">Açaí Turbo</strong>
+                                    <p style="font-size: 11px; color: #666; margin: 2px 0 0;">+20% de volume e textura mais gelada</p>
+                                </div>
+                                <i class="fa-solid fa-circle-check" style="color: #28a745; font-size: 18px;"></i>
+                            </div>
 
-                $('.loading__circle').css('display', 'flex');
-                btn.prop('disabled', true).html('<i class="fa-solid fa-spinner fa-spin"></i> Processando...');
+                            <div style="display: flex; align-items: center; padding: 10px; background: #f8f9fa; border-radius: 8px; margin-bottom: 15px;">
+                                <img src="public/images/combo_chef.webp" alt="Combo do Chef" style="width: 50px; height: 50px; border-radius: 6px; object-fit: cover; margin-right: 10px;">
+                                <div style="flex: 1;">
+                                    <strong style="font-size: 13px; color: #2b2b2b;">Combo do Chef</strong>
+                                    <p style="font-size: 11px; color: #666; margin: 2px 0 0;">Açaí + Brownie + Camada surpresa</p>
+                                </div>
+                                <i class="fa-solid fa-circle-check" style="color: #28a745; font-size: 18px;"></i>
+                            </div>
 
-                // Primeiro limpar o carrinho, depois adicionar os produtos do upsell
-                $.ajax({
-                    type: 'POST',
-                    url: 'item/clear.php',
-                    success: function() {
-                        console.log('🧹 Carrinho limpo! Adicionando produtos do upsell...');
+                            <div style="display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 8px; padding: 12px;">
+                                <div style="text-align: center;">
+                                    <span style="font-size: 11px; color: #666; display: block;">Economia de</span>
+                                    <strong style="font-size: 16px; color: #dc3545;">R$ 38,80</strong>
+                                </div>
+                                <div style="background: #28a745; color: white; padding: 8px 15px; border-radius: 6px; text-align: center;">
+                                    <span style="font-size: 10px; display: block; opacity: 0.9;">Total do combo:</span>
+                                    <strong style="font-size: 18px;">R$ 19,90</strong>
+                                </div>
+                            </div>
 
-                        const productIds = [7, 8, 9];
-
-                        // Adicionar produtos sequencialmente
-                        function addProduct(index) {
-                            if (index >= productIds.length) {
-                                console.log('✅ Todos os produtos adicionados! Redirecionando para PIX...');
-                                $('.loading__circle').css('display', 'none');
-                                localStorage.setItem('totalCarrinho', '19.90');
-                                window.location.href = 'pix.php';
-                                return;
+                            <p style="text-align: center; font-size: 12px; color: #666; margin-top: 12px;">
+                                <i class="fa-solid fa-truck-fast" style="color: #64268c; margin-right: 5px;"></i> Entrega junto com seu pedido
+                            </p>
+                        </div>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: '<i class="fa-solid fa-bolt"></i> Aproveitar Oferta',
+                    cancelButtonText: 'Não, obrigado',
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#6c757d',
+                    width: '380px',
+                    customClass: {
+                        popup: 'upsell-popup',
+                        confirmButton: 'upsell-confirm-btn',
+                        cancelButton: 'upsell-cancel-btn'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Processar compra do upsell
+                        Swal.fire({
+                            title: 'Processando...',
+                            html: 'Adicionando produtos ao carrinho',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
                             }
+                        });
 
-                            const productId = productIds[index];
-                            console.log('➕ Adicionando produto ID:', productId);
+                        // Limpar carrinho e adicionar produtos do upsell
+                        $.ajax({
+                            type: 'POST',
+                            url: 'item/clear.php',
+                            success: function() {
+                                const productIds = [7, 8, 9];
 
-                            $.ajax({
-                                type: 'POST',
-                                url: window.rotas.adicionarCarrinho,
-                                data: {
-                                    product_id: productId,
-                                    qtd: 1,
-                                    observacoes: 'upsell'
-                                },
-                                success: function(response) {
-                                    console.log('✅ Produto ' + productId + ' adicionado:', response);
-                                    addProduct(index + 1);
-                                },
-                                error: function(xhr, status, error) {
-                                    console.error('❌ Erro ao adicionar produto ' + productId + ':', error);
-                                    $('.loading__circle').css('display', 'none');
-                                    btn.prop('disabled', false).html(originalText);
-                                    alert('Erro ao adicionar produtos. Tente novamente.');
+                                function addProduct(index) {
+                                    if (index >= productIds.length) {
+                                        localStorage.setItem('totalCarrinho', '19.90');
+                                        window.location.href = 'pix.php';
+                                        return;
+                                    }
+
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: window.rotas.adicionarCarrinho,
+                                        data: {
+                                            product_id: productIds[index],
+                                            qtd: 1,
+                                            observacoes: 'upsell'
+                                        },
+                                        success: function() {
+                                            addProduct(index + 1);
+                                        },
+                                        error: function() {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Erro',
+                                                text: 'Erro ao adicionar produtos. Tente novamente.'
+                                            });
+                                        }
+                                    });
                                 }
-                            });
-                        }
 
-                        addProduct(0);
-                    },
-                    error: function() {
-                        console.error('❌ Erro ao limpar carrinho');
-                        $('.loading__circle').css('display', 'none');
-                        btn.prop('disabled', false).html(originalText);
-                        alert('Erro ao processar. Tente novamente.');
+                                addProduct(0);
+                            },
+                            error: function() {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Erro',
+                                    text: 'Erro ao processar. Tente novamente.'
+                                });
+                            }
+                        });
                     }
                 });
-            });
+            }, 3000);
         });
     </script>
 </body>
 </html>
-
