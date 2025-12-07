@@ -105,7 +105,7 @@ function acai_cart_total(array $cart): float
         $total += isset($item['total']) ? (float) $item['total'] : 0.0;
     }
 
-    return $total;
+    return round($total, 2);
 }
 
 /**

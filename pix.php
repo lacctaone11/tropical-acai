@@ -712,15 +712,15 @@ $(document).ready(function() {
                 clearInterval(statusCheckInterval);
                 return;
             }
-            
+
             if (Date.now() - startTime > maxDuration) {
                 console.log('Tempo máximo de verificação atingido, parando');
                 clearInterval(statusCheckInterval);
                 return;
             }
-    
+
             await checkPaymentStatus(transactionId);
-        }, 5000);
+        }, 1000);
     }
 
     async function checkPaymentStatus(transactionId) {

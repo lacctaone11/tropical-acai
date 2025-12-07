@@ -47,7 +47,7 @@ if (isset($cart[$productId])) {
     ];
 }
 
-$cart[$productId]['total'] = $cart[$productId]['unit_price'] * $cart[$productId]['qtd'];
+$cart[$productId]['total'] = round($cart[$productId]['unit_price'] * $cart[$productId]['qtd'], 2);
 
 acai_set_cart($cart);
 

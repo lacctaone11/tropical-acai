@@ -44,7 +44,7 @@ $cart[$productId]['qtd']   = $newQty;
 $unitPrice                 = isset($cart[$productId]['unit_price'])
     ? (float) $cart[$productId]['unit_price']
     : (isset($cart[$productId]['preco_promocional']) ? (float) $cart[$productId]['preco_promocional'] : 0.0);
-$cart[$productId]['total'] = $unitPrice * $newQty;
+$cart[$productId]['total'] = round($unitPrice * $newQty, 2);
 
 acai_set_cart($cart);
 

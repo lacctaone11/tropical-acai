@@ -86,7 +86,7 @@ try {
         exit;
     }
 
-    $amountInCents = intval($amount * 100);
+    $amountInCents = intval(round($amount * 100));
 
     // Preparar payload para Titans Hub
     $payload = [
