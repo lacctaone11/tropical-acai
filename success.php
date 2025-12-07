@@ -587,58 +587,58 @@ $totalCarrinho = acai_cart_total($cart);
                 $('.loading__circle').css('display', 'flex');
                 btn.prop('disabled', true).html('<i class="fa-solid fa-spinner fa-spin"></i> Processando...');
 
-                const productIds = [7, 8, 9];
-                let completed = 0;
-                let hasError = false;
+                // Primeiro limpar o carrinho, depois adicionar os produtos do upsell
+                $.ajax({
+                    type: 'POST',
+                    url: 'item/clear.php',
+                    success: function() {
+                        console.log('🧹 Carrinho limpo! Adicionando produtos do upsell...');
 
-                // Adicionar produtos sequencialmente para evitar problemas
-                function addProduct(index) {
-                    if (index >= productIds.length) {
-                        // Todos os produtos adicionados com sucesso
-                        console.log('✅ Todos os produtos adicionados! Redirecionando para PIX...');
-                        $('.loading__circle').css('display', 'none');
-                        localStorage.setItem('totalCarrinho', '10.90');
-                        window.location.href = 'pix.php';
-                        return;
-                    }
+                        const productIds = [7, 8, 9];
 
-                    const productId = productIds[index];
-                    console.log('➕ Adicionando produto ID:', productId);
-
-                    $.ajax({
-                        type: 'POST',
-                        url: window.rotas.adicionarCarrinho,
-                        data: {
-                            product_id: productId,
-                            qtd: 1,
-                            observacoes: 'upsell'
-                        },
-                        success: function(response) {
-                            console.log('✅ Produto ' + productId + ' adicionado:', response);
-                            // Adicionar próximo produto
-                            addProduct(index + 1);
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('❌ Erro ao adicionar produto ' + productId + ':', error);
-                            $('.loading__circle').css('display', 'none');
-                            btn.prop('disabled', false).html(originalText);
-
-                            if (typeof Swal !== 'undefined') {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Erro',
-                                    text: 'Erro ao adicionar produtos. Tente novamente.',
-                                    confirmButtonText: 'OK'
-                                });
-                            } else {
-                                alert('Erro ao adicionar produtos. Tente novamente.');
+                        // Adicionar produtos sequencialmente
+                        function addProduct(index) {
+                            if (index >= productIds.length) {
+                                console.log('✅ Todos os produtos adicionados! Redirecionando para PIX...');
+                                $('.loading__circle').css('display', 'none');
+                                localStorage.setItem('totalCarrinho', '10.90');
+                                window.location.href = 'pix.php';
+                                return;
                             }
-                        }
-                    });
-                }
 
-                // Iniciar adição sequencial
-                addProduct(0);
+                            const productId = productIds[index];
+                            console.log('➕ Adicionando produto ID:', productId);
+
+                            $.ajax({
+                                type: 'POST',
+                                url: window.rotas.adicionarCarrinho,
+                                data: {
+                                    product_id: productId,
+                                    qtd: 1,
+                                    observacoes: 'upsell'
+                                },
+                                success: function(response) {
+                                    console.log('✅ Produto ' + productId + ' adicionado:', response);
+                                    addProduct(index + 1);
+                                },
+                                error: function(xhr, status, error) {
+                                    console.error('❌ Erro ao adicionar produto ' + productId + ':', error);
+                                    $('.loading__circle').css('display', 'none');
+                                    btn.prop('disabled', false).html(originalText);
+                                    alert('Erro ao adicionar produtos. Tente novamente.');
+                                }
+                            });
+                        }
+
+                        addProduct(0);
+                    },
+                    error: function() {
+                        console.error('❌ Erro ao limpar carrinho');
+                        $('.loading__circle').css('display', 'none');
+                        btn.prop('disabled', false).html(originalText);
+                        alert('Erro ao processar. Tente novamente.');
+                    }
+                });
             });
         });
     </script>
