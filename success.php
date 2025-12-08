@@ -320,7 +320,7 @@ $totalCarrinho = acai_cart_total($cart);
                 $('#order-address').text(enderecoTexto);
             }
 
-            // Mostrar popup de upsell após 2 segundos
+            // Mostrar popup de upsell após 5 segundos
             setTimeout(function() {
                 Swal.fire({
                     title: '<span style="color: #64268c;">Ei, espera! 🎁</span>',
@@ -442,7 +442,7 @@ $totalCarrinho = acai_cart_total($cart);
                         });
                     }
                 });
-            }, 2000);
+            }, 5000);
         });
     </script>
 </body>
