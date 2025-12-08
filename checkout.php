@@ -240,16 +240,12 @@ $totalCarrinho = acai_cart_total($cart);
             gtag('config', 'AW-17761957026');
         </script>
 
-        <!-- Preconnect para recursos externos -->
-        <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
         <!-- Font Awesome via CDN -->
         <link rel="stylesheet"
               href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
               integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
               crossorigin="anonymous"
-              referrerpolicy="no-referrer"
-              media="print" onload="this.media='all'" />
+              referrerpolicy="no-referrer" />
         <link rel="shortcut icon" href="public/images/favicon_acai.webp"/>
         <link rel="shortcut icon" href="public/images/favicon_acai.webp"/>
         <link rel="icon" href="public/images/favicon_acai.webp" sizes="32x32"/>
@@ -624,12 +620,13 @@ $totalCarrinho = acai_cart_total($cart);
                 pix: "checkout/pix"
             };
         </script>
-        <script src="public/js/jquery.min.js"></script>
-        <script defer src="public/js/bootstrap.min.js"></script>
-        <script defer src="public/js/jquery.mask.min.js"></script>
+        <script type="text/javascript" src="public/js/jquery.min.js"></script>
+        <script defer type="text/javascript" src="public/js/bootstrap.min.js"></script>
+        <script defer type="text/javascript" src="public/js/jquery.mask.min.js"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script defer src="public/js/select2.min.js"></script>
-        <script defer src="public/js/functions.js?v=<?php echo time(); ?>"></script>
+        <script defer type="text/javascript" src="public/js/sweetalert.min.js"></script>
+        <script defer type="text/javascript" src="public/js/select2.min.js"></script>
+        <script defer type="text/javascript" src="public/js/functions.js?v=<?php echo time(); ?>"></script>
         <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"5cb2a07379cd4eefbb95393e110dd461","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
         <script>
         // Função para alternar o carrinho (colapsável)
