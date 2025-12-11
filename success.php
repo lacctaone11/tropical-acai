@@ -139,15 +139,15 @@ $totalCarrinho = acai_cart_total($cart);
           referrerpolicy="no-referrer" />
     <link rel="shortcut icon" href="public/images/favicon_acai.webp" />
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17761107013"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17766487583"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
+        gtag('config', 'AW-17766487583');
         gtag('config', 'AW-17761107013');
         gtag('config', 'AW-17761923751');
         gtag('config', 'AW-17761957026');
-        gtag('config', 'AW-17766487583');
 
         // Conversão Google Ads - AW-17766487583
         gtag('event', 'conversion', {
