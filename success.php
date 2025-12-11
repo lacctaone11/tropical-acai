@@ -147,6 +147,12 @@ $totalCarrinho = acai_cart_total($cart);
         gtag('config', 'AW-17761107013');
         gtag('config', 'AW-17761923751');
         gtag('config', 'AW-17761957026');
+        gtag('config', 'AW-17766487583');
+
+        // Conversão Google Ads - AW-17766487583
+        gtag('event', 'conversion', {
+            'send_to': 'AW-17766487583/PAx3CLSD_8wbEJ-s3JdC'
+        });
     </script>
 
     <!-- CSS Crítico - Evita flash de conteúdo sem estilo -->

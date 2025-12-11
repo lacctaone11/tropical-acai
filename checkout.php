@@ -238,6 +238,7 @@ $totalCarrinho = acai_cart_total($cart);
             gtag('config', 'AW-17761107013');
             gtag('config', 'AW-17761923751');
             gtag('config', 'AW-17761957026');
+            gtag('config', 'AW-17766487583');
         </script>
 
         <!-- Font Awesome via CDN -->
