@@ -46,6 +46,21 @@ $dominios = [
         'nome_fantasia' => 'Tropical Açaí'
     ],
 
+    // Domínio 4: tropicalacai.lahtref.shop
+    'tropicalacai.lahtref.shop' => [
+        'nome_empresa' => 'AILTON REINALDO RODRIGUES SILVEIRA',
+        'cnpj' => '',
+        'endereco' => 'AV PRES VARGAS, 771',
+        'bairro' => 'Getulio Vargas',
+        'cidade' => 'Bagé',
+        'estado' => 'RS',
+        'cep' => '96412-660',
+        'telefone' => '(53) 98117-8024',
+        'telefone_link' => '5553981178024',
+        'email' => 'contato@tropicalacai.lahtref.shop',
+        'nome_fantasia' => 'Tropical Açaí'
+    ],
+
     // Localhost (para testes - usa dados do primeiro domínio)
     'localhost' => [
         'nome_empresa' => 'GUIA DE JOINVILLE LTDA',
