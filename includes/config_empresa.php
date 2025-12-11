@@ -1,7 +1,7 @@
 <?php
 // Configuração de dados por domínio
 $dominios = [
-    // Domínio principal: tropicalacai.lahtref.shop
+    // Domínio: tropicalacai.lahtref.shop
     'tropicalacai.lahtref.shop' => [
         'nome_empresa' => 'AILTON REINALDO RODRIGUES SILVEIRA',
         'cnpj' => '',
@@ -13,6 +13,21 @@ $dominios = [
         'telefone' => '(53) 98117-8024',
         'telefone_link' => '5553981178024',
         'email' => 'contato@tropicalacai.lahtref.shop',
+        'nome_fantasia' => 'Tropical Açaí'
+    ],
+
+    // Domínio: brasilwebnet.rest
+    'brasilwebnet.rest' => [
+        'nome_empresa' => 'AURORA AVIACAO AGRICOLA LTDA',
+        'cnpj' => '',
+        'endereco' => 'R ALF ALFERES PAULO SALDANHA, 670 - SALA 6',
+        'bairro' => 'São Francisco',
+        'cidade' => 'Boa Vista',
+        'estado' => 'RR',
+        'cep' => '69305-260',
+        'telefone' => '(95) 98117-8024',
+        'telefone_link' => '5595981178024',
+        'email' => 'contato@brasilwebnet.rest',
         'nome_fantasia' => 'Tropical Açaí'
     ],
 
