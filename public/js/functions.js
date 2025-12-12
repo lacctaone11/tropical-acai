@@ -823,50 +823,68 @@ $(document).ready(function() {
             } else {
                 $(this).removeClass('error');
                 $('.label-error[name="postal_code_label_error"]').text('').css('display', 'none');
+                // Função para preencher endereço
+                function preencherEndereco(logradouro, bairro, cidade, estado) {
+                    $('#hidden-zipcode-after-valid').addClass('d-none');
+                    $('#delivery-address-next').removeClass('d-none');
+                    $('#shipping-methods').removeClass('d-none');
+                    $('.frete-cart').removeClass('d-none').addClass('d-flex');
+                    $("#endereco").val(logradouro || '');
+                    $("#bairro").val(bairro || '');
+                    $("#cidade").val(cidade || '');
+                    $("#estado").val(estado || '');
+                    if (logradouro) {
+                        $("#numero").focus();
+                    } else {
+                        $("#endereco").focus();
+                    }
+                }
+
+                // Função para mostrar campos manuais
+                function mostrarCamposManuais() {
+                    $('#hidden-zipcode-after-valid').addClass('d-none');
+                    $('#delivery-address-next').removeClass('d-none');
+                    $('#shipping-methods').removeClass('d-none');
+                    $('.frete-cart').removeClass('d-none').addClass('d-flex');
+                    $("#endereco").val('').focus();
+                    $("#bairro").val('');
+                    $("#cidade").val('');
+                    $("#estado").val('');
+                }
+
+                // Tentar BrasilAPI primeiro (mais rápida)
+                $('.loading__circle').css('display', 'flex');
                 $.ajax({
-                    url: 'https://viacep.com.br/ws/' + cepLimpo + '/json/',
+                    url: 'https://brasilapi.com.br/api/cep/v1/' + cepLimpo,
                     dataType: 'json',
-                    timeout: 10000,
+                    timeout: 5000,
                     success: function(resposta) {
-                        if (resposta && !resposta.erro && resposta.cep) {
-                            $('#hidden-zipcode-after-valid').addClass('d-none');
-                            $('#delivery-address-next').removeClass('d-none');
-                            $('#shipping-methods').removeClass('d-none');
-                            $('.frete-cart').removeClass('d-none').addClass('d-flex');
-                            $("#endereco").val(resposta.logradouro || '');
-                            $("#bairro").val(resposta.bairro || '');
-                            $("#cidade").val(resposta.localidade || '');
-                            $("#estado").val(resposta.uf || '');
-                            $("#numero").focus();
+                        $('.loading__circle').css('display', 'none');
+                        if (resposta && resposta.cep) {
+                            preencherEndereco(resposta.street, resposta.neighborhood, resposta.city, resposta.state);
                         } else {
-                            // CEP não encontrado - mostrar campos para preenchimento manual
-                            $('#hidden-zipcode-after-valid').addClass('d-none');
-                            $('#delivery-address-next').removeClass('d-none');
-                            $('#shipping-methods').removeClass('d-none');
-                            $('.frete-cart').removeClass('d-none').addClass('d-flex');
-                            $("#endereco").val('').focus();
-                            $("#bairro").val('');
-                            $("#cidade").val('');
-                            $("#estado").val('');
+                            mostrarCamposManuais();
                         }
                     },
-                    error: function(xhr, status, error) {
-                        console.log('Erro ViaCEP:', status, error);
-                        // Em caso de erro, mostrar campos para preenchimento manual
-                        $('#hidden-zipcode-after-valid').addClass('d-none');
-                        $('#delivery-address-next').removeClass('d-none');
-                        $('#shipping-methods').removeClass('d-none');
-                        $('.frete-cart').removeClass('d-none').addClass('d-flex');
-                        $("#endereco").val('').focus();
-                    },
-                    beforeSend: function() {
-                        $('.loading__circle').css({
-                            'display': 'flex'
-                        });
-                    },
-                    complete: function() {
-                        $('.loading__circle').css({
-                            'display': 'none'
+                    error: function() {
+                        // Fallback para ViaCEP
+                        $.ajax({
+                            url: 'https://viacep.com.br/ws/' + cepLimpo + '/json/',
+                            dataType: 'json',
+                            timeout: 5000,
+                            success: function(resposta) {
+                                $('.loading__circle').css('display', 'none');
+                                if (resposta && !resposta.erro && resposta.cep) {
+                                    preencherEndereco(resposta.logradouro, resposta.bairro, resposta.localidade, resposta.uf);
+                                } else {
+                                    mostrarCamposManuais();
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                $('.loading__circle').css('display', 'none');
+                                console.log('Erro APIs CEP:', status, error);
+                                mostrarCamposManuais();
+                            }
                         });
                     }
                 });
