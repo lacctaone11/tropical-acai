@@ -18,9 +18,9 @@ RUN a2enmod rewrite
 # Configurar Apache para permitir .htaccess
 RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
 
-# Copiar script de inicialização e converter CRLF para LF
-COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN sed -i 's/\r$//' /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh
+# Configurar Apache para usar variável PORT - Railway injeta essa variável
+RUN sed -i 's/80/${PORT}/g' /etc/apache2/sites-available/000-default.conf \
+    && sed -i 's/Listen 80/Listen ${PORT}/g' /etc/apache2/ports.conf
 
 # Copiar arquivos do projeto
 COPY . /var/www/html/
@@ -29,8 +29,16 @@ COPY . /var/www/html/
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html
 
-# Expor porta padrão
-EXPOSE 80
+# Railway usa essa porta - IMPORTANTE
+ENV PORT=80
+ENV APACHE_RUN_DIR=/var/run/apache2
+ENV APACHE_PID_FILE=/var/run/apache2/apache2.pid
+ENV APACHE_RUN_USER=www-data
+ENV APACHE_RUN_GROUP=www-data
+ENV APACHE_LOG_DIR=/var/log/apache2
 
-# Comando de inicialização
-ENTRYPOINT ["/docker-entrypoint.sh"]
+# Expor porta
+EXPOSE ${PORT}
+
+# Iniciar Apache com substituição de variáveis de ambiente
+CMD ["/bin/bash", "-c", "sed -i \"s/\\${PORT}/$PORT/g\" /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf && apache2-foreground"]
