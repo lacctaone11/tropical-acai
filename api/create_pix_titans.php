@@ -16,11 +16,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-// Bynet API
-define('BYNET_API_URL', 'https://api-gateway.techbynet.com/api/user/transactions');
-define('BYNET_API_KEY', 'a783adf9-6d96-4520-86ac-2e814bfb34e0');
+// Titans Hub API
+define('TITANS_API_URL', 'https://api.titanshub.io/v1/transactions');
+define('TITANS_PUBLIC_KEY', 'pk_zPl4SZSQDQs2VFNXXhSR7yVzoT9sBh4mkPquAcZjqriQczsX');
+define('TITANS_SECRET_KEY', 'sk_uveRUOH7x4mxQMLJSOD-sh_igT5N9PSrzjmW0Q8qYb2CejuK');
 
-// Funcao para gerar CPF valido
+// Função para gerar CPF válido
 function gerarCpfValido() {
     $n = [];
     for ($i = 0; $i < 9; $i++) {
@@ -51,27 +52,27 @@ try {
     $dados = json_decode($input, true);
 
     if (!$dados) {
-        echo json_encode(['success' => false, 'error' => 'Dados nao fornecidos']);
+        echo json_encode(['success' => false, 'error' => 'Dados não fornecidos']);
         exit;
     }
 
     $dadosPessoais = $dados['dadosPessoais'] ?? $dados;
     $amount = floatval($dados['amount'] ?? 0);
 
-    // Pegar nome ou usar padrao
+    // Pegar nome ou usar padrão
     $nome = trim($dadosPessoais['nome'] ?? 'Cliente');
     if (empty($nome)) {
         $nome = 'Cliente';
     }
 
-    // Pegar telefone ou usar padrao
+    // Pegar telefone ou usar padrão
     $telefone = $dadosPessoais['telefone'] ?? $dadosPessoais['celular'] ?? '';
     $telefoneLimpo = preg_replace('/\D/', '', $telefone);
     if (strlen($telefoneLimpo) < 10) {
         $telefoneLimpo = '11999999999';
     }
 
-    // Gerar CPF valido
+    // Gerar CPF válido
     $cpf = gerarCpfValido();
     $email = $cpf . '@cliente.com';
 
@@ -79,24 +80,25 @@ try {
     if ($amount <= 0) {
         echo json_encode([
             'success' => false,
-            'error' => 'Valor invalido',
+            'error' => 'Valor inválido',
             'amount_received' => $amount
         ]);
         exit;
     }
 
     $amountInCents = intval(round($amount * 100));
-    $orderId = 'WP' . time();
 
-    // Preparar payload para Bynet - EXATAMENTE conforme exemplo do DEV
+    // Preparar payload para Titans Hub
     $payload = [
-        'amount' => $amountInCents,
-        'currency' => 'BRL',
         'paymentMethod' => 'pix',
-        'installments' => 1,
-        'postbackUrl' => '',
-        'metadata' => '{"orderId":"' . $orderId . '"}',
-        'traceable' => true,
+        'amount' => $amountInCents,
+        'items' => [[
+            'title' => 'Kit Conjunto Infantil',
+            'quantity' => 1,
+            'unitPrice' => $amountInCents,
+            'tangible' => false,
+            'externalRef' => 'pedido-' . time()
+        ]],
         'customer' => [
             'name' => $nome,
             'email' => $email,
@@ -104,57 +106,28 @@ try {
             'document' => [
                 'type' => 'cpf',
                 'number' => $cpf
-            ],
-            'externalRef' => 'CUSTOMER-' . time(),
-            'address' => [
-                'street' => 'Av Paulista',
-                'streetNumber' => '1000',
-                'complement' => '',
-                'zipCode' => '01310100',
-                'neighborhood' => 'Bela Vista',
-                'city' => 'Sao Paulo',
-                'state' => 'SP',
-                'country' => 'BR'
             ]
         ],
-        'items' => [[
-            'title' => 'Acai Tropical',
-            'unitPrice' => $amountInCents,
-            'quantity' => 1,
-            'tangible' => true,
-            'externalRef' => 'ORDER-' . $orderId
-        ]],
         'pix' => [
             'expiresInDays' => 1
-        ],
-        'shipping' => [
-            'fee' => 0,
-            'address' => [
-                'street' => 'Av Paulista',
-                'streetNumber' => '1000',
-                'complement' => '',
-                'zipCode' => '01310100',
-                'neighborhood' => 'Bela Vista',
-                'city' => 'Sao Paulo',
-                'state' => 'SP',
-                'country' => 'BR'
-            ]
         ]
     ];
 
-    // Fazer requisicao para Bynet
+    // Autenticação Titans Hub
+    $auth_value = base64_encode(TITANS_PUBLIC_KEY . ':' . TITANS_SECRET_KEY);
+
+    // Fazer requisição
     $curl = curl_init();
     curl_setopt_array($curl, [
-        CURLOPT_URL => BYNET_API_URL,
+        CURLOPT_URL => TITANS_API_URL,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_TIMEOUT => 30,
         CURLOPT_POST => true,
         CURLOPT_POSTFIELDS => json_encode($payload),
         CURLOPT_HTTPHEADER => [
             'Accept: application/json',
-            'Content-Type: application/json',
-            'x-api-key: ' . BYNET_API_KEY,
-            'User-Agent: AtivoB2B/1.0'
+            'Authorization: Basic ' . $auth_value,
+            'Content-Type: application/json'
         ],
     ]);
 
@@ -162,12 +135,6 @@ try {
     $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
     $curlError = curl_error($curl);
     curl_close($curl);
-
-    // Log para debug
-    error_log('=== BYNET CREATE PIX ===');
-    error_log('Payload: ' . json_encode($payload));
-    error_log('HTTP Code: ' . $httpCode);
-    error_log('Response: ' . $response);
 
     if ($curlError) {
         echo json_encode(['success' => false, 'error' => 'Erro cURL: ' . $curlError]);
@@ -179,37 +146,23 @@ try {
     if ($responseData === null) {
         echo json_encode([
             'success' => false,
-            'error' => 'Resposta invalida da API',
+            'error' => 'Resposta inválida da API',
             'httpCode' => $httpCode,
-            'raw' => substr($response, 0, 500)
+            'raw' => substr($response, 0, 300)
         ]);
         exit;
     }
 
-    // Verificar sucesso - Bynet retorna status 200 e data com qrCode
-    if ($httpCode === 200 && isset($responseData['data'])) {
-        $data = $responseData['data'];
-
-        // Bynet pode retornar qrCode ou pix.qrcode
-        $qrCode = $data['qrCode'] ?? $data['pix']['qrcode'] ?? $data['pix']['qrCode'] ?? null;
-
-        if ($qrCode) {
-            echo json_encode([
-                'success' => true,
-                'transactionId' => $data['id'],
-                'qrcode' => $qrCode,
-                'expirationDate' => $data['pix']['expirationDate'] ?? '',
-                'amount' => ($data['amount'] ?? $amountInCents) / 100,
-                'status' => $data['status'] ?? 'WAITING_PAYMENT'
-            ]);
-        } else {
-            echo json_encode([
-                'success' => false,
-                'error' => 'QR Code nao retornado',
-                'httpCode' => $httpCode,
-                'details' => $responseData
-            ]);
-        }
+    // Verificar sucesso
+    if (isset($responseData['pix']['qrcode'])) {
+        echo json_encode([
+            'success' => true,
+            'transactionId' => $responseData['id'],
+            'qrcode' => $responseData['pix']['qrcode'],
+            'expirationDate' => $responseData['pix']['expirationDate'] ?? '',
+            'amount' => $responseData['amount'] / 100,
+            'status' => $responseData['status'] ?? 'pending'
+        ]);
     } else {
         $errorMsg = $responseData['message'] ?? $responseData['error'] ?? 'Erro desconhecido';
         echo json_encode([
@@ -223,6 +176,6 @@ try {
 } catch (Exception $e) {
     echo json_encode([
         'success' => false,
-        'error' => 'Excecao: ' . $e->getMessage()
+        'error' => 'Exceção: ' . $e->getMessage()
     ]);
 }

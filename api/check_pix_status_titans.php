@@ -1,24 +1,27 @@
 <?php
 
-// Bynet API
-define('BYNET_API_URL', 'https://api-gateway.techbynet.com/api/user/transactions');
-define('BYNET_API_KEY', 'a783adf9-6d96-4520-86ac-2e814bfb34e0');
+// Titans Hub API
+define('TITANS_API_URL', 'https://api.titanshub.io/v1/transactions');
+define('TITANS_PUBLIC_KEY', 'pk_zPl4SZSQDQs2VFNXXhSR7yVzoT9sBh4mkPquAcZjqriQczsX');
+define('TITANS_SECRET_KEY', 'sk_uveRUOH7x4mxQMLJSOD-sh_igT5N9PSrzjmW0Q8qYb2CejuK');
 
 header('Content-Type: application/json');
 
 $transactionId = $_GET['transactionId'] ?? null;
 
 if (!$transactionId) {
-    echo json_encode(['success' => false, 'error' => 'Transaction ID nao fornecido']);
+    echo json_encode(['success' => false, 'error' => 'Transaction ID não fornecido']);
     exit;
 }
 
-$ch = curl_init(BYNET_API_URL . '/' . $transactionId);
+// Autenticação Titans Hub (Basic Auth: public_key:secret_key)
+$auth = base64_encode(TITANS_PUBLIC_KEY . ':' . TITANS_SECRET_KEY);
+
+$ch = curl_init(TITANS_API_URL . '/' . $transactionId);
 curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_HTTPHEADER => [
-        'x-api-key: ' . BYNET_API_KEY,
-        'User-Agent: AtivoB2B/1.0',
+        'Authorization: Basic ' . $auth,
         'Content-Type: application/json',
         'Accept: application/json'
     ],
@@ -32,13 +35,13 @@ $error = curl_error($ch);
 curl_close($ch);
 
 if ($error) {
-    echo json_encode(['success' => false, 'error' => 'Erro na requisicao: ' . $error]);
+    echo json_encode(['success' => false, 'error' => 'Erro na requisição: ' . $error]);
     exit;
 }
 
 $responseData = json_decode($response, true);
 
-error_log('=== BYNET CHECK PIX STATUS ===');
+error_log('=== TITANS CHECK PIX STATUS ===');
 error_log('Transaction ID: ' . $transactionId);
 error_log('HTTP Code: ' . $httpCode);
 error_log('Response: ' . substr($response, 0, 500));
@@ -55,22 +58,19 @@ if ($httpCode === 200 && $transaction !== null) {
 
     error_log('Transaction Status: ' . $status);
 
-    // Bynet usa PAID para pagamento confirmado
-    $isPaid = ($status === 'PAID' || $status === 'paid' || $status === 'approved' || $status === 'APPROVED');
-
     echo json_encode([
         'success' => true,
         'status' => $status,
         'transaction' => $transaction,
-        'paid' => $isPaid
+        'paid' => ($status === 'paid' || $status === 'approved')
     ]);
 } else {
-    $errorMessage = 'Erro ao consultar transacao';
+    $errorMessage = 'Erro ao consultar transação';
     if (isset($responseData['message'])) {
         $errorMessage = $responseData['message'];
     }
 
-    error_log('Erro ao consultar transacao: ' . $errorMessage);
+    error_log('Erro ao consultar transação: ' . $errorMessage);
 
     echo json_encode([
         'success' => false,
