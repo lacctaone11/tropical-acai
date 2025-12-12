@@ -3,6 +3,10 @@ FROM php:8.2-apache
 # Instalar extensões PHP necessárias
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
+# Desabilitar MPMs conflitantes e garantir apenas prefork
+RUN a2dismod mpm_event mpm_worker 2>/dev/null || true && \
+    a2enmod mpm_prefork
+
 # Habilitar mod_rewrite do Apache
 RUN a2enmod rewrite
 
