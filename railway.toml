@@ -3,7 +3,8 @@ builder = "dockerfile"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-healthcheckPath = "/"
-healthcheckTimeout = 100
+healthcheckPath = "/health.php"
+healthcheckTimeout = 300
+startCommand = "/start.sh"
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 10
