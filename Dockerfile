@@ -18,9 +18,9 @@ RUN a2enmod rewrite
 # Configurar Apache para permitir .htaccess
 RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
 
-# Copiar script de inicialização primeiro
+# Copiar script de inicialização e converter CRLF para LF
 COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
+RUN sed -i 's/\r$//' /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh
 
 # Copiar arquivos do projeto
 COPY . /var/www/html/
