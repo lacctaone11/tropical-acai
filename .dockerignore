@@ -1,0 +1,11 @@
+.git
+.gitignore
+.dockerignore
+.claude
+*.md
+*.log
+node_modules
+.env.local
+.env.*.local
+cookies.txt
+nul
