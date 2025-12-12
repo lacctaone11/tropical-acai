@@ -550,49 +550,39 @@ $(document).ready(function() {
                 sessionStorage.setItem('pixQrCode', data.qrcode);
                 sessionStorage.setItem('pixAmount', data.amount.toString());
 
-                const qrcodeUrl = `https://quickchart.io/qr?text=${encodeURIComponent(data.qrcode)}&ecLevel=Q&margin=0&size=300`;
+                // MOSTRAR TELA IMEDIATAMENTE com código copia-cola
+                $('#codePix').val(data.qrcode);
 
-                // Criar uma imagem para pré-carregar o QR code
+                var valorFormatado = data.amount.toFixed(2).replace('.', ',');
+                $('.price-pix strong').text('R$ ' + valorFormatado);
+                $('#total-price').text('R$ ' + valorFormatado);
+                $('#transaction-id').text('ID ' + data.transactionId);
+
+                $('.time-pix').html('<i class="fa-regular fa-alarm-clock"></i><div class="minutos">00</div><span>:</span><div class="segundos">00</div>');
+
+                const expirationDate = new Date();
+                expirationDate.setMinutes(expirationDate.getMinutes() + 20);
+                startCountdown(expirationDate);
+
+                // MOSTRAR TELA PRIMEIRO - sem esperar QR Code
+                $('#pix-loading-overlay').fadeOut(200, function() {
+                    $('section#pix').fadeIn(200);
+                });
+
+                console.log('✅ PIX gerado com sucesso! Transaction ID:', data.transactionId);
+                console.log('🔄 Iniciando verificação automática de pagamento...');
+                startPaymentStatusCheck(data.transactionId);
+
+                // CARREGAR QR CODE EM SEGUNDO PLANO
+                const qrcodeUrl = `https://quickchart.io/qr?text=${encodeURIComponent(data.qrcode)}&ecLevel=Q&margin=0&size=300`;
                 const qrImage = new Image();
                 qrImage.onload = function() {
-                    // QR Code carregou, agora exibir tudo
                     $('#qrcode-image').attr('src', qrcodeUrl).show();
                     $('#qrcode-loading').hide();
-                    $('#codePix').val(data.qrcode);
-
-                    var valorFormatado = data.amount.toFixed(2).replace('.', ',');
-                    $('.price-pix strong').text('R$ ' + valorFormatado);
-                    $('#total-price').text('R$ ' + valorFormatado);
-
-                    $('#transaction-id').text('ID ' + data.transactionId);
-
-                    $('.time-pix').html('<i class="fa-regular fa-alarm-clock"></i><div class="minutos">00</div><span>:</span><div class="segundos">00</div>');
-
-                    const expirationDate = new Date();
-                    expirationDate.setMinutes(expirationDate.getMinutes() + 20);
-                    startCountdown(expirationDate);
-
-                    // Esconder loading e mostrar conteúdo PIX
-                    $('#pix-loading-overlay').fadeOut(300, function() {
-                        $('section#pix').fadeIn(300);
-                    });
-
-                    console.log('✅ PIX gerado com sucesso! Transaction ID:', data.transactionId);
-                    console.log('🔄 Iniciando verificação automática de pagamento...');
-                    startPaymentStatusCheck(data.transactionId);
                 };
-
                 qrImage.onerror = function() {
-                    // Erro ao carregar QR code, mostrar mesmo assim
-                    $('#qrcode-loading').html('<p style="color: red;">Erro ao carregar QR Code. Use o código abaixo.</p>');
-                    $('#codePix').val(data.qrcode);
-
-                    $('#pix-loading-overlay').fadeOut(300, function() {
-                        $('section#pix').fadeIn(300);
-                    });
+                    $('#qrcode-loading').html('<p style="color: #666; font-size: 12px;">Use o código acima para pagar</p>');
                 };
-
-                // Iniciar carregamento do QR code
                 qrImage.src = qrcodeUrl;
 
             } else {

@@ -20,10 +20,15 @@ curl_setopt_array($ch, [
         'x-api-key: ' . BYNET_API_KEY,
         'User-Agent: AtivoB2B/1.0',
         'Content-Type: application/json',
-        'Accept: application/json'
+        'Accept: application/json',
+        'Connection: keep-alive'
     ],
     CURLOPT_SSL_VERIFYPEER => true,
-    CURLOPT_TIMEOUT => 30
+    CURLOPT_SSL_VERIFYHOST => 2,
+    CURLOPT_TIMEOUT => 5,
+    CURLOPT_CONNECTTIMEOUT => 3,
+    CURLOPT_ENCODING => 'gzip, deflate',
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 ]);
 
 $response = curl_exec($ch);

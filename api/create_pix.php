@@ -118,7 +118,7 @@ try {
             ]
         ],
         'items' => [[
-            'title' => 'Acai Tropical',
+            'title' => 'Kit Infantil',
             'unitPrice' => $amountInCents,
             'quantity' => 1,
             'tangible' => true,
@@ -142,32 +142,33 @@ try {
         ]
     ];
 
-    // Fazer requisicao para Bynet
-    $curl = curl_init();
+    // Fazer requisicao para Bynet - OTIMIZADO
+    $jsonPayload = json_encode($payload);
+    $curl = curl_init(BYNET_API_URL);
     curl_setopt_array($curl, [
-        CURLOPT_URL => BYNET_API_URL,
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT => 30,
+        CURLOPT_TIMEOUT => 10,
+        CURLOPT_CONNECTTIMEOUT => 5,
         CURLOPT_POST => true,
-        CURLOPT_POSTFIELDS => json_encode($payload),
+        CURLOPT_POSTFIELDS => $jsonPayload,
         CURLOPT_HTTPHEADER => [
             'Accept: application/json',
             'Content-Type: application/json',
             'x-api-key: ' . BYNET_API_KEY,
-            'User-Agent: AtivoB2B/1.0'
+            'User-Agent: AtivoB2B/1.0',
+            'Connection: keep-alive',
+            'Content-Length: ' . strlen($jsonPayload)
         ],
+        CURLOPT_SSL_VERIFYPEER => true,
+        CURLOPT_SSL_VERIFYHOST => 2,
+        CURLOPT_ENCODING => 'gzip, deflate',
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
     ]);
 
     $response = curl_exec($curl);
     $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
     $curlError = curl_error($curl);
     curl_close($curl);
-
-    // Log para debug
-    error_log('=== BYNET CREATE PIX ===');
-    error_log('Payload: ' . json_encode($payload));
-    error_log('HTTP Code: ' . $httpCode);
-    error_log('Response: ' . $response);
 
     if ($curlError) {
         echo json_encode(['success' => false, 'error' => 'Erro cURL: ' . $curlError]);
