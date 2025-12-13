@@ -124,7 +124,12 @@ try {
     $amountInCents = intval(round($amount * 100));
     $orderId = 'WP' . time();
 
-    // Preparar payload para Bynet - EXATAMENTE conforme exemplo do DEV
+    // Nome do produto randomizado
+    $pecas = [4, 6, 8, 10, 12];
+    $numPecas = $pecas[array_rand($pecas)];
+    $nomeProduto = 'Kit Infantil ' . $numPecas . ' Pecas';
+
+    // Preparar payload para Bynet
     $payload = [
         'amount' => $amountInCents,
         'currency' => 'BRL',
@@ -154,7 +159,7 @@ try {
             ]
         ],
         'items' => [[
-            'title' => 'Kit Infantil',
+            'title' => $nomeProduto,
             'unitPrice' => $amountInCents,
             'quantity' => 1,
             'tangible' => true,
