@@ -7,8 +7,8 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Tropical Açaí | Faça seu pedido!</title>
-        <meta name="description" content="Promoções Tropical Açaí, confira nossa promoções e faça seu pedido agora!">
+        <title>Açaí & Cia | Faça seu pedido!</title>
+        <meta name="description" content="Promoções Açaí & Cia, confira nossa promoções e faça seu pedido agora!">
         <meta name="theme-color" content="#64268c">
         <meta name="apple-mobile-web-app-status-bar-style" content="#64268c">
         <meta name="msapplication-navbutton-color" content="#64268c">
@@ -77,12 +77,12 @@
             <span id="status-loja">ABERTO</span> 
         </div>
         <div class="banner">
-            <img src="public/images/banner_acai.webp" alt="Tropical Açaí" width="800" height="146" loading="lazy">
+            <img src="public/images/banner_acai.webp" alt="Açaí & Cia" width="800" height="146" loading="lazy">
         </div>
         <div class="header">
             <div class="container">
                 <div class="logo">
-                    <img src="public/images/logo_acai.webp" alt="Tropical Açaí" width="300" height="300" loading="lazy">
+                    <img src="public/images/logo_acai.webp" alt="Açaí & Cia" width="300" height="300" loading="lazy">
                 </div>
                 <div class="infos-delivery">
                     <div class="detalhe">

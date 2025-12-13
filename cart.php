@@ -18,8 +18,8 @@ foreach ($cart as $cartItem) {
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="Ng8LzSxnDpeIq5x1nCgRPwEdxj9ujdHL3YMckxIo">
-        <title>Tropical Açaí | Faça seu pedido!</title>
-        <meta name="description" content="Promoções Tropical Açaí, confira nossa promoções e faça seu pedido agora!">
+        <title>Açaí & Cia | Faça seu pedido!</title>
+        <meta name="description" content="Promoções Açaí & Cia, confira nossa promoções e faça seu pedido agora!">
         <meta name="theme-color" content="#64268c">
         <meta name="apple-mobile-web-app-status-bar-style" content="#64268c">
         <meta name="msapplication-navbutton-color" content="#64268c">
@@ -88,8 +88,8 @@ foreach ($cart as $cartItem) {
                     <span>Voltar</span>
                 </a>
                 <div class="header-logo">
-                    <img src="public/images/logo_acai.webp" alt="Tropical Açaí">
-                    <span>Tropical Açaí</span>
+                    <img src="public/images/logo_acai.webp" alt="Açaí & Cia">
+                    <span>Açaí & Cia</span>
                 </div>
                 <div class="header-seguro">
                     <i class="fa-solid fa-lock"></i>

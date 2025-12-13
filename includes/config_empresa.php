@@ -13,7 +13,7 @@ $dominios = [
         'telefone' => '(53) 98117-8024',
         'telefone_link' => '5553981178024',
         'email' => 'contato@tropicalacai.lahtref.shop',
-        'nome_fantasia' => 'Tropical Açaí'
+        'nome_fantasia' => 'Açaí & Cia'
     ],
 
     // Domínio: brasilwebnet.rest
@@ -28,7 +28,7 @@ $dominios = [
         'telefone' => '(95) 98117-8024',
         'telefone_link' => '5595981178024',
         'email' => 'contato@brasilwebnet.rest',
-        'nome_fantasia' => 'Tropical Açaí'
+        'nome_fantasia' => 'Açaí & Cia'
     ],
 
     // Domínio: seuacaitropical.seudireitobr12.shop
@@ -43,7 +43,7 @@ $dominios = [
         'telefone' => '(49) 98117-8024',
         'telefone_link' => '5549981178024',
         'email' => 'contato@seuacaitropical.seudireitobr12.shop',
-        'nome_fantasia' => 'Tropical Açaí'
+        'nome_fantasia' => 'Açaí & Cia'
     ],
 
     // Localhost (para testes)
@@ -58,7 +58,7 @@ $dominios = [
         'telefone' => '(53) 98117-8024',
         'telefone_link' => '5553981178024',
         'email' => 'contato@tropicalacai.lahtref.shop',
-        'nome_fantasia' => 'Tropical Açaí'
+        'nome_fantasia' => 'Açaí & Cia'
     ]
 ];
 

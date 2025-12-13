@@ -237,8 +237,8 @@ html, body{background-color:var(--primaria) !important;}
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="Ng8LzSxnDpeIq5x1nCgRPwEdxj9ujdHL3YMckxIo">
-        <title>Tropical Açaí | Faça seu pedido!</title>
-        <meta name="description" content="Promoções Tropical Açaí, confira nossa promoções e faça seu pedido agora!">
+        <title>Açaí & Cia | Faça seu pedido!</title>
+        <meta name="description" content="Promoções Açaí & Cia, confira nossa promoções e faça seu pedido agora!">
         <meta name="theme-color" content="#64268c">
         <meta name="apple-mobile-web-app-status-bar-style" content="#64268c">
         <meta name="msapplication-navbutton-color" content="#64268c">
@@ -294,16 +294,57 @@ html, body{background-color:var(--primaria) !important;}
     </head>
     <body class="delivery">
         <!-- Loading overlay que cobre tudo até o PIX estar pronto -->
+        <style>
+            @keyframes pulse-logo {
+                0%, 100% { transform: scale(1); opacity: 1; }
+                50% { transform: scale(1.05); opacity: 0.9; }
+            }
+            @keyframes progress-bar {
+                0% { width: 0%; }
+                20% { width: 20%; }
+                40% { width: 45%; }
+                60% { width: 65%; }
+                80% { width: 85%; }
+                100% { width: 100%; }
+            }
+            @keyframes dots {
+                0%, 20% { content: '.'; }
+                40% { content: '..'; }
+                60% { content: '...'; }
+                80%, 100% { content: ''; }
+            }
+            .loading-dots::after {
+                content: '';
+                animation: dots 1.5s infinite;
+            }
+            .pix-progress-bar {
+                width: 200px;
+                height: 4px;
+                background: rgba(255,255,255,0.3);
+                border-radius: 4px;
+                overflow: hidden;
+                margin: 20px auto;
+            }
+            .pix-progress-bar-inner {
+                height: 100%;
+                background: #fff;
+                border-radius: 4px;
+                animation: progress-bar 3s ease-in-out infinite;
+            }
+        </style>
         <div id="pix-loading-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primaria); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-            <div class="logo" style="margin-bottom: 30px;">
-                <img src="public/images/logo_acai.webp" alt="Tropical Açaí" style="width: 120px; height: 120px; border-radius: 50%;">
+            <div class="logo" style="margin-bottom: 30px; animation: pulse-logo 2s ease-in-out infinite;">
+                <img src="public/images/logo_acai.webp" alt="Açaí & Cia" style="width: 120px; height: 120px; border-radius: 50%; box-shadow: 0 0 30px rgba(255,255,255,0.3);">
             </div>
             <div style="text-align: center; color: #fff;">
-                <div style="margin-bottom: 20px;">
-                    <i class="fa-solid fa-spinner fa-spin" style="font-size: 40px;"></i>
+                <div style="margin-bottom: 15px;">
+                    <i class="fa-solid fa-spinner fa-spin" style="font-size: 36px;"></i>
                 </div>
-                <h3 style="font-size: 18px; margin-bottom: 10px;">Gerando seu PIX...</h3>
-                <p style="font-size: 14px; opacity: 0.8;">Aguarde enquanto preparamos seu pagamento</p>
+                <h3 style="font-size: 18px; margin-bottom: 8px;" class="loading-dots">Gerando seu PIX</h3>
+                <p style="font-size: 14px; opacity: 0.8; margin-bottom: 0;">Aguarde enquanto preparamos seu pagamento</p>
+                <div class="pix-progress-bar">
+                    <div class="pix-progress-bar-inner"></div>
+                </div>
             </div>
         </div>
 
@@ -319,7 +360,7 @@ html, body{background-color:var(--primaria) !important;}
             <div class="dados-pix">
                 <div class="topo-pix">
                     <div class="logo">
-                        <img src="public/images/logo_acai.webp" alt="Tropical Açaí">
+                        <img src="public/images/logo_acai.webp" alt="Açaí & Cia">
                     </div>
                     <div class="icone-pix">
                         <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">

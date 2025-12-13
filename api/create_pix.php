@@ -4,6 +4,9 @@ error_reporting(E_ALL);
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
 
+// Iniciar sessão para controle de PIX e carrinho
+session_start();
+
 // Headers primeiro
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -13,6 +16,28 @@ header('Access-Control-Allow-Headers: Content-Type');
 // Handle preflight
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
+    exit;
+}
+
+// Verificar limite de PIX por sessão (máximo 3)
+if (!isset($_SESSION['pix_count'])) {
+    $_SESSION['pix_count'] = 0;
+    $_SESSION['pix_first_time'] = time();
+}
+
+// Reset contador se passou 1 hora
+if (time() - $_SESSION['pix_first_time'] > 3600) {
+    $_SESSION['pix_count'] = 0;
+    $_SESSION['pix_first_time'] = time();
+}
+
+// Limitar a 3 PIX por sessão
+if ($_SESSION['pix_count'] >= 3) {
+    echo json_encode([
+        'success' => false,
+        'error' => 'Limite de tentativas atingido. Aguarde alguns minutos e tente novamente.',
+        'limit_reached' => true
+    ]);
     exit;
 }
 
@@ -236,6 +261,10 @@ try {
         $qrCode = $data['qrCode'] ?? $data['pix']['qrcode'] ?? $data['pix']['qrCode'] ?? null;
 
         if ($qrCode) {
+            // Incrementar contador de PIX e limpar carrinho
+            $_SESSION['pix_count']++;
+            $_SESSION['cart'] = [];
+
             echo json_encode([
                 'success' => true,
                 'transactionId' => $data['id'],
