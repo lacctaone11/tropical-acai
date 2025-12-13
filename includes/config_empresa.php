@@ -31,6 +31,21 @@ $dominios = [
         'nome_fantasia' => 'Tropical Açaí'
     ],
 
+    // Domínio: seuacaitropical.seudireitobr12.shop
+    'seuacaitropical.seudireitobr12.shop' => [
+        'nome_empresa' => 'BOMFRIO',
+        'cnpj' => '',
+        'endereco' => 'Av. Getúlio Dorneles Vargas, 176 N - SALA 17',
+        'bairro' => 'Centro',
+        'cidade' => 'Chapecó',
+        'estado' => 'SC',
+        'cep' => '89801-000',
+        'telefone' => '(49) 98117-8024',
+        'telefone_link' => '5549981178024',
+        'email' => 'contato@seuacaitropical.seudireitobr12.shop',
+        'nome_fantasia' => 'Tropical Açaí'
+    ],
+
     // Localhost (para testes)
     'localhost' => [
         'nome_empresa' => 'AILTON REINALDO RODRIGUES SILVEIRA',
