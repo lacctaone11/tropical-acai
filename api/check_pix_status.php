@@ -1,32 +1,34 @@
 <?php
 
-// Titans Hub API
-define('TITANS_API_URL', 'https://api.titanshub.io/v1/transactions');
-define('TITANS_PUBLIC_KEY', 'pk_zPl4SZSQDQs2VFNXXhSR7yVzoT9sBh4mkPquAcZjqriQczsX');
-define('TITANS_SECRET_KEY', 'sk_uveRUOH7x4mxQMLJSOD-sh_igT5N9PSrzjmW0Q8qYb2CejuK');
+// Bynet API
+define('BYNET_API_URL', 'https://api-gateway.techbynet.com/api/user/transactions');
+define('BYNET_API_KEY', 'a783adf9-6d96-4520-86ac-2e814bfb34e0');
 
 header('Content-Type: application/json');
 
 $transactionId = $_GET['transactionId'] ?? null;
 
 if (!$transactionId) {
-    echo json_encode(['success' => false, 'error' => 'Transaction ID não fornecido']);
+    echo json_encode(['success' => false, 'error' => 'Transaction ID nao fornecido']);
     exit;
 }
 
-// Autenticação Titans Hub (Basic Auth: public_key:secret_key)
-$auth = base64_encode(TITANS_PUBLIC_KEY . ':' . TITANS_SECRET_KEY);
-
-$ch = curl_init(TITANS_API_URL . '/' . $transactionId);
+$ch = curl_init(BYNET_API_URL . '/' . $transactionId);
 curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_HTTPHEADER => [
-        'Authorization: Basic ' . $auth,
+        'x-api-key: ' . BYNET_API_KEY,
+        'User-Agent: AtivoB2B/1.0',
         'Content-Type: application/json',
-        'Accept: application/json'
+        'Accept: application/json',
+        'Connection: keep-alive'
     ],
     CURLOPT_SSL_VERIFYPEER => true,
-    CURLOPT_TIMEOUT => 30
+    CURLOPT_SSL_VERIFYHOST => 2,
+    CURLOPT_TIMEOUT => 5,
+    CURLOPT_CONNECTTIMEOUT => 3,
+    CURLOPT_ENCODING => 'gzip, deflate',
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 ]);
 
 $response = curl_exec($ch);
@@ -35,13 +37,13 @@ $error = curl_error($ch);
 curl_close($ch);
 
 if ($error) {
-    echo json_encode(['success' => false, 'error' => 'Erro na requisição: ' . $error]);
+    echo json_encode(['success' => false, 'error' => 'Erro na requisicao: ' . $error]);
     exit;
 }
 
 $responseData = json_decode($response, true);
 
-error_log('=== TITANS CHECK PIX STATUS ===');
+error_log('=== BYNET CHECK PIX STATUS ===');
 error_log('Transaction ID: ' . $transactionId);
 error_log('HTTP Code: ' . $httpCode);
 error_log('Response: ' . substr($response, 0, 500));
@@ -58,19 +60,22 @@ if ($httpCode === 200 && $transaction !== null) {
 
     error_log('Transaction Status: ' . $status);
 
+    // Bynet usa PAID para pagamento confirmado
+    $isPaid = ($status === 'PAID' || $status === 'paid' || $status === 'approved' || $status === 'APPROVED');
+
     echo json_encode([
         'success' => true,
         'status' => $status,
         'transaction' => $transaction,
-        'paid' => ($status === 'paid' || $status === 'approved')
+        'paid' => $isPaid
     ]);
 } else {
-    $errorMessage = 'Erro ao consultar transação';
+    $errorMessage = 'Erro ao consultar transacao';
     if (isset($responseData['message'])) {
         $errorMessage = $responseData['message'];
     }
 
-    error_log('Erro ao consultar transação: ' . $errorMessage);
+    error_log('Erro ao consultar transacao: ' . $errorMessage);
 
     echo json_encode([
         'success' => false,
