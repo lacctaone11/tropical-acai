@@ -1786,6 +1786,14 @@ font-size: 16px;
 button#general-submit-button span{
 font-size:16px !important;
 }
+button#general-submit-button.btn-loading{
+opacity: 0.8;
+cursor: not-allowed;
+pointer-events: none;
+}
+button#general-submit-button.btn-loading i{
+margin-right: 8px;
+}
 section#rodape-checkout hr{
 border-top: 2px solid #2b2b2b;
 }

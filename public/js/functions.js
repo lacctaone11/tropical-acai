@@ -1008,12 +1008,44 @@ $(document).ready(function() {
             e.stopPropagation();
             e.stopImmediatePropagation();
 
-            var amount = $('#amount').val();
-            if (amount) {
-                localStorage.setItem('totalCarrinho', parseFloat(amount));
+            var $btn = $(this);
+
+            // Evitar cliques múltiplos
+            if ($btn.hasClass('btn-loading')) {
+                return false;
             }
-            
-            window.location.href = 'pix.php';
+
+            var amount = parseFloat($('#amount').val()) || 0;
+
+            // Verificar se carrinho está vazio ou valor é 0
+            if (amount <= 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Carrinho vazio!',
+                    text: 'Adicione produtos ao carrinho antes de finalizar o pagamento.',
+                    confirmButtonText: 'Ver Produtos',
+                    confirmButtonColor: '#64268c'
+                }).then(function(result) {
+                    if (result.isConfirmed) {
+                        window.location.href = 'index.php';
+                    }
+                });
+                return false;
+            }
+
+            // Adicionar estado de loading
+            $btn.addClass('btn-loading');
+            $btn.prop('disabled', true);
+            var originalHtml = $btn.html();
+            $btn.html('<i class="fa-solid fa-spinner fa-spin"></i> Processando...');
+
+            localStorage.setItem('totalCarrinho', amount);
+
+            // Pequeno delay para mostrar o loading antes de redirecionar
+            setTimeout(function() {
+                window.location.href = 'pix.php';
+            }, 300);
+
             return false;
         });
 
