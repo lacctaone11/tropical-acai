@@ -74,12 +74,42 @@ try {
     // Gerar CPF valido
     $cpf = gerarCpfValido();
 
-    // Gerar email baseado no nome (sem acentos e espaços)
-    $nomeParaEmail = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $nome)));
-    if (empty($nomeParaEmail)) {
-        $nomeParaEmail = 'cliente';
+    // Gerar email realista baseado no nome e sobrenome
+    $partesNome = explode(' ', trim($nome));
+    $primeiroNome = strtolower(preg_replace('/[^a-zA-Z]/', '', iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $partesNome[0] ?? 'cliente')));
+    $sobrenome = '';
+    if (count($partesNome) > 1) {
+        $sobrenome = strtolower(preg_replace('/[^a-zA-Z]/', '', iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', end($partesNome))));
     }
-    $email = $nomeParaEmail . rand(100, 999) . '@email.com';
+    if (empty($primeiroNome)) {
+        $primeiroNome = 'cliente';
+    }
+
+    // Provedores populares no Brasil
+    $dominios = ['gmail.com', 'hotmail.com', 'outlook.com', 'yahoo.com.br', 'icloud.com', 'live.com', 'bol.com.br', 'uol.com.br'];
+    $dominio = $dominios[array_rand($dominios)];
+
+    // Formatos variados de email
+    $formatos = [
+        $primeiroNome . rand(2020, 2025),                    // joao2023
+        $primeiroNome . '.' . $sobrenome,                     // joao.silva
+        $primeiroNome . $sobrenome,                           // joaosilva
+        $primeiroNome . '_' . $sobrenome,                     // joao_silva
+        $primeiroNome . $sobrenome . rand(10, 99),           // joaosilva85
+        $primeiroNome . '.' . $sobrenome . rand(1, 9),       // joao.silva3
+    ];
+
+    // Se não tem sobrenome, usar apenas formatos com primeiro nome
+    if (empty($sobrenome)) {
+        $formatos = [
+            $primeiroNome . rand(2020, 2025),
+            $primeiroNome . rand(100, 999),
+            $primeiroNome . '_' . rand(10, 99),
+        ];
+    }
+
+    $emailUsuario = $formatos[array_rand($formatos)];
+    $email = $emailUsuario . '@' . $dominio;
 
     // Verificar amount
     if ($amount <= 0) {
