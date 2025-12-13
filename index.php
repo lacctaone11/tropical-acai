@@ -13,8 +13,26 @@
         <meta name="apple-mobile-web-app-status-bar-style" content="#64268c">
         <meta name="msapplication-navbutton-color" content="#64268c">
 
-        <!-- Microsoft Clarity -->
-        <script type="text/javascript">
+        <!-- DNS Prefetch e Preconnect para recursos externos -->
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="dns-prefetch" href="//fonts.gstatic.com">
+        <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+        <link rel="dns-prefetch" href="//www.googletagmanager.com">
+        <link rel="dns-prefetch" href="//www.clarity.ms">
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
+        <!-- Google Fonts Inter otimizado (apenas pesos usados) -->
+        <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"></noscript>
+
+        <!-- Font Awesome carregado de forma assíncrona -->
+        <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" crossorigin="anonymous">
+        <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript>
+
+        <!-- Microsoft Clarity (defer) -->
+        <script type="text/javascript" defer>
             (function(c,l,a,r,i,t,y){
                 c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
                 t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
@@ -32,12 +50,6 @@
             gtag('config', 'AW-17775568630');
             gtag('config', 'AW-17760992072');
         </script>
-
-        <link rel="stylesheet"
-              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-              integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-              crossorigin="anonymous"
-              referrerpolicy="no-referrer" />
         <link rel="shortcut icon" href="public/images/favicon_acai.webp" />
         <link rel="shortcut icon" href="public/images/favicon_acai.webp" />
         <link rel="icon" href="public/images/favicon_acai.webp" sizes="32x32" />
@@ -53,12 +65,12 @@
         </style>
 
         <link rel="preload" href="public/css/bootstrap.min.css" as="style">
-        <link rel="preload" href="public/css/global.css?v=<?php echo time(); ?>" as="style">
+        <link rel="preload" href="public/css/global.css?v=2.1" as="style">
         <link href="public/css/bootstrap.min.css" rel="stylesheet" media="print" onload="this.media='all'">
-        <link href="public/css/global.css?v=<?php echo time(); ?>" rel="stylesheet" media="print" onload="this.media='all'; document.body.classList.add('loaded');">
+        <link href="public/css/global.css?v=2.1" rel="stylesheet" media="print" onload="this.media='all'; document.body.classList.add('loaded');">
         <noscript>
             <link href="public/css/bootstrap.min.css" rel="stylesheet">
-            <link href="public/css/global.css?v=<?php echo time(); ?>" rel="stylesheet">
+            <link href="public/css/global.css?v=2.1" rel="stylesheet">
             <style>body { opacity: 1 !important; }</style>
         </noscript>
        
