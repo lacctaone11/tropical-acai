@@ -34,7 +34,7 @@ $dominios = [
     // Domínio: seuacaitropical.seudireitobr12.shop
     'seuacaitropical.seudireitobr12.shop' => [
         'nome_empresa' => 'BOMFRIO',
-        'cnpj' => '',
+        'cnpj' => '85.374.635/0001-01',
         'endereco' => 'Av. Getúlio Dorneles Vargas, 176 N - SALA 17',
         'bairro' => 'Centro',
         'cidade' => 'Chapecó',
