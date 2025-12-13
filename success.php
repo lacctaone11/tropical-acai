@@ -146,6 +146,7 @@ $totalCarrinho = acai_cart_total($cart);
         gtag('js', new Date());
         gtag('config', 'AW-17766487583');
         gtag('config', 'AW-17775568630');
+        gtag('config', 'AW-17760992072');
 
         // Conversão Google Ads - AW-17766487583
         gtag('event', 'conversion', {
@@ -155,6 +156,11 @@ $totalCarrinho = acai_cart_total($cart);
         // Conversão Google Ads - AW-17775568630 (Compra)
         gtag('event', 'conversion', {
             'send_to': 'AW-17775568630/fRU4COWL9M8bEPbNhpxC'
+        });
+
+        // Conversão Google Ads - AW-17760992072
+        gtag('event', 'conversion', {
+            'send_to': 'AW-17760992072/ZR8HCJrQkMobEMj2jJVC'
         });
     </script>
 

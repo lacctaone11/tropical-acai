@@ -54,6 +54,7 @@ foreach ($cart as $cartItem) {
             gtag('js', new Date());
             gtag('config', 'AW-17766487583');
             gtag('config', 'AW-17775568630');
+            gtag('config', 'AW-17760992072');
         </script>
 
         <!-- CSS Crítico - Evita flash de conteúdo sem estilo -->
