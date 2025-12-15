@@ -160,7 +160,5 @@
             <p>CEP: <?php echo $empresa['cep']; ?></p>
         </div>
     </div>
-
-    <?php include 'includes/footer.php'; ?>
 </body>
 </html>

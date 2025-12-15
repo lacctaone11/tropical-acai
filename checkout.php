@@ -654,7 +654,5 @@ $totalCarrinho = acai_cart_total($cart);
             }
         });
         </script>
-
-        <?php include 'includes/footer.php'; ?>
     </body>
 </html>

@@ -146,7 +146,5 @@
             <p class="last-update">Última atualização: <?php echo date('d/m/Y'); ?></p>
         </div>
     </div>
-
-    <?php include 'includes/footer.php'; ?>
 </body>
 </html>
