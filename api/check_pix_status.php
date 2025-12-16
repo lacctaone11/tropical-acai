@@ -1,8 +1,9 @@
 <?php
 
-// Bynet API
-define('BYNET_API_URL', 'https://api-gateway.techbynet.com/api/user/transactions');
-define('BYNET_API_KEY', 'a783adf9-6d96-4520-86ac-2e814bfb34e0');
+// Titans Hub API
+define('TITANS_API_URL', 'https://api.titanshub.io/v1/transactions');
+define('TITANS_PUBLIC_KEY', 'pk_zPl4SZSQDQs2VFNXXhSR7yVzoT9sBh4mkPquAcZjqriQczsX');
+define('TITANS_SECRET_KEY', 'sk_uveRUOH7x4mxQMLJSOD-sh_igT5N9PSrzjmW0Q8qYb2CejuK');
 
 header('Content-Type: application/json');
 
@@ -13,12 +14,14 @@ if (!$transactionId) {
     exit;
 }
 
-$ch = curl_init(BYNET_API_URL . '/' . $transactionId);
+// Autenticação Titans Hub
+$auth_value = base64_encode(TITANS_PUBLIC_KEY . ':' . TITANS_SECRET_KEY);
+
+$ch = curl_init(TITANS_API_URL . '/' . $transactionId);
 curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_HTTPHEADER => [
-        'x-api-key: ' . BYNET_API_KEY,
-        'User-Agent: AtivoB2B/1.0',
+        'Authorization: Basic ' . $auth_value,
         'Content-Type: application/json',
         'Accept: application/json',
         'Connection: keep-alive'
@@ -43,30 +46,16 @@ if ($error) {
 
 $responseData = json_decode($response, true);
 
-error_log('=== BYNET CHECK PIX STATUS ===');
-error_log('Transaction ID: ' . $transactionId);
-error_log('HTTP Code: ' . $httpCode);
-error_log('Response: ' . substr($response, 0, 500));
+if ($httpCode === 200 && isset($responseData['status'])) {
+    $status = $responseData['status'];
 
-$transaction = null;
-if (isset($responseData['data']) && is_array($responseData['data'])) {
-    $transaction = $responseData['data'];
-} elseif (isset($responseData['id']) && isset($responseData['paymentMethod'])) {
-    $transaction = $responseData;
-}
-
-if ($httpCode === 200 && $transaction !== null) {
-    $status = $transaction['status'] ?? 'unknown';
-
-    error_log('Transaction Status: ' . $status);
-
-    // Bynet usa PAID para pagamento confirmado
-    $isPaid = ($status === 'PAID' || $status === 'paid' || $status === 'approved' || $status === 'APPROVED');
+    // Titans Hub usa 'paid' para pagamento confirmado
+    $isPaid = ($status === 'paid' || $status === 'PAID' || $status === 'approved' || $status === 'APPROVED');
 
     echo json_encode([
         'success' => true,
         'status' => $status,
-        'transaction' => $transaction,
+        'transaction' => $responseData,
         'paid' => $isPaid
     ]);
 } else {
@@ -74,8 +63,6 @@ if ($httpCode === 200 && $transaction !== null) {
     if (isset($responseData['message'])) {
         $errorMessage = $responseData['message'];
     }
-
-    error_log('Erro ao consultar transacao: ' . $errorMessage);
 
     echo json_encode([
         'success' => false,
